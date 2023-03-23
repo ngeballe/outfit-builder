@@ -1,0 +1,33 @@
+GIT
+  remote: https://github.com/sinatra/sinatra.git
+  revision: e1c903621c5a6bd72433e1efaca2cb9f6fba81b4
+  specs:
+    rack-protection (3.0.5)
+      rack
+    sinatra (3.0.5)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.0.5)
+      tilt (~> 2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    mustermann (3.0.0)
+      ruby2_keywords (~> 0.0.1)
+    nio4r (2.5.8)
+    puma (6.1.1)
+      nio4r (~> 2.0)
+    rack (2.2.6.4)
+    ruby2_keywords (0.0.5)
+    tilt (2.1.0)
+
+PLATFORMS
+  arm64-darwin-21
+
+DEPENDENCIES
+  puma
+  sinatra!
+
+BUNDLED WITH
+   2.3.14
