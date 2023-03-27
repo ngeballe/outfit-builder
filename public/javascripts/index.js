@@ -11,10 +11,6 @@ Object.assign(IndexPage, {
   },
 
   bindEvents(events) {
-    console.log('3');
-    debugger;
-    Page.bindEvents();
-
     this.addShirt.addEventListener('click', this.showNewItemModal.bind(this, 'shirt'));
     this.addPants.addEventListener('click', this.showNewItemModal.bind(this, 'pants'));
     this.addSweater.addEventListener('click', this.showNewItemModal.bind(this, 'sweater'));
@@ -25,9 +21,15 @@ Object.assign(IndexPage, {
     // modal delete event
     this.modal.addEventListener('click', this.handleModalClick.bind(this));
 
-    debugger;
-    document.querySelector('.page-nav').style.display = 'none';
-    document.querySelector('.page-nav').addEventListener('click', this.handlePageNavClick.bind(this));
+    this.pageNav.addEventListener('click', this.handlePageNavClick.bind(this));
+  },
+
+  handlePageNavClick(event) {
+    const link = event.target.closest('a');
+
+    const pageNavLinks = this.pageNav.querySelectorAll('a');
+    pageNavLinks.forEach(link => link.classList.remove('active'));
+    link.classList.add('active');
   },
 
   handleModalClick(event) {
@@ -150,6 +152,7 @@ Object.assign(IndexPage, {
   },
 
   showNewItemModal(category) {
+    event.preventDefault();
     // new item modal
     this.modal.innerHTML = this.templates['new-item-template']({itemType: category, seasons: App.SEASONS });
 
@@ -173,8 +176,6 @@ Object.assign(IndexPage, {
   init() {
     Page.init();
 
-    this.bindEvents();
-
     this.shirtsEl = document.querySelector('.shirts');
     this.pantsEl = document.querySelector('.pants');
     this.sweatersEl = document.querySelector('.sweaters');
@@ -183,6 +184,11 @@ Object.assign(IndexPage, {
     this.addPants = document.querySelector('#add-pants');
     this.addSweater = document.querySelector('#add-sweater');
     this.addShoes = document.querySelector('#add-shoes');
+
+    this.pageHeaderContent.innerHTML = this.templates['page-nav-template']();
+    this.pageNav = document.querySelector('.page-nav');
+
+    this.bindEvents();
 
     return this;
   },

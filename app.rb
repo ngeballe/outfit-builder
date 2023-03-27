@@ -33,15 +33,12 @@ get '/' do
 end
 
 get '/items' do
-  # binding.pry
-  # @active_he = '/items'
   @current_page_stylesheet = 'index.css'
   @current_page_scripts = ['index.js']
   erb :items
 end
 
 get '/combinations' do
-  # binding.pry
   @current_page_stylesheet = 'combinations.css'
   @current_page_scripts = ['combinations.js']
   erb :combinations

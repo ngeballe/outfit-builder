@@ -149,6 +149,8 @@ Object.assign(OutfitsPage, {
   },
 
   init() {
+    Page.init();
+
     this.outfitsTable = document.querySelector('#outfits');
     this.includeSweatersSelect = document.querySelector('#include-sweaters');
     this.showImagesSelect = document.querySelector('#show-images');

@@ -77,7 +77,11 @@ const Page = {
   },
 
   bindEvents() {
-    console.log('4');
+    this.bindModalEvents();
+    this.bindKeyEvents();
+  },
+
+  bindModalEvents() {
     this.modalBackground.addEventListener('click', event => {
       const target = event.target;
       if (!target.closest('.modal') && !target.closest('.modal-footer') && !target.closest('.modal-body') && !target.closest('.modal-header')) {
@@ -86,7 +90,9 @@ const Page = {
     });
 
     this.modal.addEventListener('click', this.handleModalClick.bind(this));
+  },
 
+  bindKeyEvents() {
     document.addEventListener('keyup', this.handleKeyup.bind(this));
   },
 
@@ -97,7 +103,7 @@ const Page = {
     this.cacheTemplates();
     this.bindEvents();
 
-    document.querySelector('.page-header-content').innerHTML = this.templates['page-header-content-template']();
+    this.pageHeaderContent = document.querySelector('.page-header-content');
 
     return this;
   },

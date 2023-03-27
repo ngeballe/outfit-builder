@@ -268,6 +268,8 @@ Object.assign(CombinationsPage, {
     Page.init();
 
     this.tableContainer = document.querySelector('#table-container');
+    this.pageHeaderContent.innerHTML = this.templates['type-selector']();
+
     this.typesSelectEl = document.querySelector('#types');
 
     return this;
