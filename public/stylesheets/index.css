@@ -1,0 +1,147 @@
+.items {
+  margin: calc(-1 * var(--header-height)) 0 0 0;
+  padding: 0 1rem;
+}
+
+.item-section {
+  padding: calc(var(--header-height) + 1rem) 0 0 0;
+}
+
+.item-section-heading {
+  padding: 0 0 0.5rem 0;
+}
+
+.item-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  margin: 0 auto;
+}
+
+.item-figure {
+  border: 1px solid #777;
+  width: 200px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.item-img-thumb {
+  width: 300px;
+  display: block;
+}
+
+.index-img-thumb[data-zoom="1"] {
+  width: 400px;
+}
+
+.index-img-thumb[data-zoom="2"] {
+  width: 800px;
+}
+
+.index-img-thumb[data-zoom="3"] {
+  width: 1200px;
+}
+
+.item-title {
+  text-align: center;
+  font-weight: normal;
+  padding: 0.5rem;
+  width: 200px;
+}
+
+/***
+ * modal
+***/
+
+.modal-header {
+  justify-content: center;
+}
+
+.modal-header-btn-group-left {
+  position: absolute;
+  left: 1rem;
+  top: 1.2rem;
+  display: flex;
+}
+
+.btn-delete {
+  background: transparent;
+  border: none;
+}
+
+.btn-edit {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+}
+
+.fa-pencil {
+  color: #666;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.modal-figure {
+  width: 400px;
+  max-height: 500px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.modal-edit-figure {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-image-item[data-zoom="1"] {
+  width: 400px;
+}
+
+.modal-image-item[data-zoom="2"] {
+  width: 800px;
+}
+
+.modal-image-item[data-zoom="3"] {
+  width: 1200px;
+}
+
+.item-show-modal-title {
+  text-align: center;
+  font-weight: normal;
+  padding: 0.75rem 0 1rem 0;
+}
+
+.checkbox-with-label {
+  display: grid;
+  grid-template-columns: 1rem 1fr;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+
+.checkbox-with-label input {
+  margin: 0;
+}
+
+
+
+/***
+ * combination-links
+***/
+
+.combination-links {
+  padding: 2rem 0 0 0;
+}
+
+.combination-link {
+  color: maroon;
+  display: block;
+  padding: 0.5rem;
+}

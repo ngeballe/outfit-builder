@@ -1,0 +1,125 @@
+<nav class="header-nav">
+  <ul class="header-nav-ul">
+    <li>
+      Viewing:
+      <select name="" id="types">
+        <option value="shirt-pants">shirts and pants</option>
+        <option value="shirt-sweater">shirts and sweaters</option>
+        <option value="shirt-shoes">shirts and shoes</option>
+        <option value="pants-sweater">pants and sweaters</option>
+        <option value="pants-shoes">pants and shoes</option>
+        <option value="sweater-shoes">sweaters and shoes</option>
+      </select>
+    </li>
+    <li><a href="index.html" class="header-nav-link other-page">Items</a></li>
+    <li><a href="outfits.html" class="header-nav-link other-page">Outfits</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="table-container" id="table-container">
+  </div>
+
+  <div class="modal-background hide">
+    <div class="modal">
+    </div>
+  </div>
+
+  <%= @foo %>
+</main>
+
+<script id="combinations-table-template" type="text/x-handlebars-template">
+  <table id="combinations-table" class="combinations-table" data-row-type="{{rowType}}" data-column-type="{{columnType}}">
+    <thead class="combinations-thead">
+      <tr>
+        <th class="combinations-th"></th>
+        {{#each columnItems}}
+          {{> tableHeading}}
+        {{/each}}
+      </tr>
+    </thead>
+    <tbody class="combinations-tbody">
+      {{#each combinationsMatrix}}
+        <tr data-row-index="{{@index}}">
+          {{> tableHeading rowItem}}
+          {{#each combinationsForRow}}
+            {{> tableCell columnIndex=@index}}
+          {{/each}}
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</script>
+
+<script id="tableCell" type="text/x-handlebars-template" class="partial">
+  <td data-column-id="{{columnId}}" data-row-id="{{rowId}}" data-rating="{{rating}}" data-column-index="{{columnIndex}}" class="combinations-td">
+    <div class="cell-data-wrapper">
+      <a href="#" class="view-combination">View</a>
+      <label for="">Rating:</label>
+      {{> ratingSelectMenu rating=rating }}
+    </div>
+  </td>
+</script>
+
+<script id="tableHeading" type="text/x-handlebars-template" class="partial">
+  <th class="combinations-th">
+    <span class="combinations-th-item-title">{{title}}</span>
+    <figure class="combinations-th-figure">
+      <img src="{{imagePath}}" alt="" class="thumbnail-smaller">
+    </figure>
+  </th>
+</script>
+
+<script id="ratingSelectMenu" type="text/x-handlebars-template" class="partial">
+  <select name="" id="">
+    <option value="" {{selectedIfEqual rating ""}}></option>
+    <option value="5" {{selectedIfEqual rating 5}}>good</option>
+    <option value="3" {{selectedIfEqual rating 3}}>okay</option>
+    <option value="0" {{selectedIfEqual rating 0}}>bad</option>
+  </select>
+</script>
+
+<script id="combination-modal-template" type="text/x-handlebars-template">
+  <header class="modal-header combination-modal-header">
+    <p>Rating: {{> ratingSelectMenu rating=rating }}</p>
+    <div class="btn-group-zoom">
+      <button class="btn-zoom btn-zoom-in">
+        <i class="fa-solid fa-magnifying-glass-plus"></i>
+      </button>
+      <button class="btn-zoom btn-zoom-out" disabled>
+        <i class="fa-solid fa-magnifying-glass-minus"></i>
+      </button>
+    </div>
+    <a href="#" class="btn-close">
+      <i class="fa-sharp fa-solid fa-xmark"></i>
+    </a>
+  </header>
+  <div class="modal-body combination-modal-body" data-column-id="{{item1.id}}" data-row-id="{{item2.id}}">
+    <div class="arrow-container">
+      <button class="btn-scroll" id="btn-scroll-left">
+        <i class="fa-solid fa-angle-left" title="Previous in row"></i>
+      </button>
+    </div>
+    <div class="modal-figure-container">
+      <figure class="combination-modal-figure">
+        <img src="{{item1.imagePath}}" alt="" class="combination-modal-image" data-zoom="1">
+      </figure>
+      <figure class="combination-modal-figure">
+        <img src="{{item2.imagePath}}" alt="" class="combination-modal-image" data-zoom="1">
+      </figure>
+    </div>
+    <div class="arrow-container">
+      <button class="btn-scroll" id="btn-scroll-right">
+        <i class="fa-solid fa-angle-right" title="Next  in row"></i>
+      </button>
+    </div>
+  </div>
+  <footer class="modal-footer">
+    <button class="btn-scroll" id="btn-scroll-up">
+      <i class="fa-solid fa-angle-up" title="Previous in column"></i>
+    </button>
+    <button class="btn-scroll" id="btn-scroll-down">
+      <i class="fa-solid fa-angle-down" title="Next in column"></i>
+    </button>
+  </footer>
+</script>

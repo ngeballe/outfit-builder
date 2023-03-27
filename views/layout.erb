@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outfit Builder</title>
+    <script src="javascripts/handlebars-4.7.7.js"></script>
+    <link rel="stylesheet" href="/fontawesome-pro-6.3.0-web/css/all.css">
+    <link rel="stylesheet" href="/fontawesome-pro-6.3.0-web/css/sharp-solid.css">
+    <link rel="stylesheet" href="/stylesheets/application.css" />
+    <% if @current_page_stylesheet %>
+      <link rel="stylesheet" href="/stylesheets/<%= @current_page_stylesheet %>" />
+    <% end %>
+    <script src="/data/seeds.js"></script>
+    <script src="/javascripts/item.js?1.0"></script>
+    <script src="/javascripts/app.js?1.0"></script>
+    <script src="/javascripts/page.js?1.0"></script>
+    <% @current_page_scripts.each do |script| %>
+      <script src="/javascripts/<%= script %>"></script>
+    <% end %>
+  </head>
+  <body>
+    <%= erb :_header %>
+
+    <%= yield %>
+
+    <%= erb :_footer %>
+  </body>
+</html>

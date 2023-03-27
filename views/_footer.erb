@@ -1,0 +1,11 @@
+<footer class="page-footer">
+  <nav class="footer-nav">
+    <ul class="footer-nav-links">
+      <% @header_nav_links.each do |link| %>
+        <li>
+          <a href="<%= link[:href] %>" class="footer-nav-link"><%=  link[:title] %></a>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+</footer>

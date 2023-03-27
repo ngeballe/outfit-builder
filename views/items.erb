@@ -1,0 +1,199 @@
+<h1>Items</h1>
+
+<main>
+  <nav>
+    <ul class="add-button-nav-links">
+      <li>
+        <a href="#" class="btn" id="add-shirt">Add shirt</a>
+      </li>
+      <li>
+        <a href="#" class="btn" id="add-pants">Add pants</a>
+      </li>
+      <li>
+        <a href="#" class="btn" id="add-sweater">Add sweater</a>
+      </li>
+      <li>
+        <a href="#" class="btn" id="add-shoes">Add shoes</a>
+      </li>
+    </ul>
+  </nav>
+  <section class="items">
+    <div class="shirts item-section" id="shirts">
+    </div>
+    <div class="pants item-section" id="pants">
+    </div>
+    <div class="sweaters item-section" id="sweaters">
+    </div>
+    <div class="shoes item-section" id="shoes">
+    </div>
+  </section>
+
+  <section class="combination-links">
+    <h2>Combinations By Type</h2>
+    <nav>
+      <ul>
+        <li><a href="combinations.html?type1=shirt&type2=pants" class="combination-link">shirt-pants</a></li>
+        <li><a href="combinations.html?type1=shirt&type2=sweater" class="combination-link">shirt-sweater</a></li>
+        <li><a href="combinations.html?type1=shirt&type2=shoes" class="combination-link">shirt-shoes</a></li>
+        <li><a href="combinations.html?type1=pants&type2=sweater" class="combination-link">pants-sweater</a></li>
+        <li><a href="combinations.html?type1=pants&type2=shoes" class="combination-link">pants-shoes</a></li>
+        <li><a href="combinations.html?type1=sweater&type2=shoes" class="combination-link">sweater-shoes</a></li>
+      </ul>
+    </nav>
+  </section>
+
+  <div class="modal-background hide">
+    <div class="modal">
+    </div>
+  </div>
+</main>
+
+<script id="item-list-template" type="text/x-handlebars-template">
+  <h3 class="item-section-heading">{{heading}}</h3>
+  <ul class="item-list">
+    {{#each items}}
+    <li>
+      <a href="#" class="item-link" data-id="{{id}}" data-type="{{../type}}">
+        <figure class="item-figure">
+          <img src="{{imagePath}}" class="item-img-thumb" alt="">
+        </figure>
+        <h4 class="item-title">{{title}}</h4>
+      </a>
+    </li>
+    {{/each}}
+  </ul>
+</script>
+
+<script id="new-item-template" type="text/x-handlebars-template">
+  <header class="modal-header">
+    <h2 class="modal-heading">New {{titleCase itemType}}</h2>
+    <a href="#" class="btn-close">
+      <i class="fa-sharp fa-solid fa-xmark"></i>
+    </a>
+  </header>
+  <div class="modal-body">
+    <form action="#" method="post" id="new-item">
+      <input type="hidden" name="type" id="type" value="{{itemType}}">
+      <dl>
+        <dt>
+          <label for="image-path">Image Path</label>
+        </dt>
+        <dd>
+          <input type="text" id="image-path" name="image-path" value="">
+        </dd>
+        <dt>
+          <label for="image-path">Title (Optional)</label>
+        </dt>
+        <dd>
+          <input type="text" id="title" name="title" value="">
+        </dd>
+        <dd class="checkbox-with-label">
+          {{#each seasons}}
+            <input type="checkbox" name="{{.}}" id="{{.}}" checked>
+            <label for="{{.}}">{{titleCase .}}</label>
+          {{/each}}
+        </dd>
+        <dd class="checkbox-with-label">
+          <input type="checkbox" name="dirty" id="dirty">
+          <label for="dirty">Dirty</label>
+        </dd>
+        <dd class="checkbox-with-label">
+          <input type="checkbox" name="damaged" id="damaged">
+          <label for="damaged">Damaged (ripped, stained, etc.)</label>
+        </dd>
+      </dl>
+      <button type="submit" id="new-item-submit">Save</button>
+    </form>
+  </div>
+</script>
+
+<script id="show-item-template" type="text/x-handlebars-template">
+  <header class="modal-header">
+    <div class="modal-header-btn-group-left">
+      <button class="btn-delete" title="Delete item" data-id="{{id}}" data-item-type="{{type}}">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+      <button class="btn-edit" title="Edit item" data-id="{{id}}" data-item-type="{{type}}">
+        <i class="fa-solid fa-pencil"></i>
+      </button>
+    </div>
+    <button class="btn-zoom btn-zoom-in">
+      <i class="fa-solid fa-magnifying-glass-plus"></i>
+    </button>
+    <button class="btn-zoom btn-zoom-out" disabled>
+      <i class="fa-solid fa-magnifying-glass-minus"></i>
+    </button>
+    <a href="#" class="btn-close">
+      <i class="fa-sharp fa-solid fa-xmark"></i>
+    </a>
+  </header>
+  <div class="modal-body">
+    <figure class="modal-figure">
+      <img src="{{imagePath}}" class="modal-image-item" alt="" data-id="{{id}}" data-zoom="1">
+    </figure>
+    <h4 class="item-show-modal-title">{{title}}</h4>
+  </div>
+</script>
+
+<script id="edit-item-template" type="text/x-handlebars-template">
+  <header class="modal-header">
+    <h2 class="modal-heading">Edit {{titleCase item.type}}</h2>
+    <a href="#" class="btn-close">
+      <i class="fa-sharp fa-solid fa-xmark"></i>
+    </a>
+  </header>
+  <div class="modal-body">
+    <figure class="modal-edit-figure">
+      <img src="{{item.imagePath}}" alt="" class="thumbnail-larger">
+    </figure>
+    <h1>imagine!</h1>
+    <form action="#" method="post" id="edit-item">
+      <input type="hidden" id="id" name="id" value="{{item.id}}">
+      <input type="hidden" id="type" name="name" value="{{item.type}}">
+      <dl>
+        <dt>
+          <label for="image-path">Image Path</label>
+        </dt>
+        <dd>
+          <input type="text" id="image-path" name="image-path" value="{{item.imagePath}}">
+        </dd>
+        <dt>
+          <label for="image-path">Title (Optional)</label>
+        </dt>
+        <dd>
+          <input type="text" id="title" name="title" value="{{item.title}}">
+        </dd>
+        <dd class="checkbox-with-label">
+          <input type="checkbox" name="spring" id="spring" {{checkedOrNot item.spring}}>
+          <label for="spring">Spring</label>
+          <input type="checkbox" name="summer" id="summer" {{checkedOrNot item.summer}}>
+          <label for="summer">Summer</label>
+          <input type="checkbox" name="fall" id="fall" {{checkedOrNot item.fall}}>
+          <label for="fall">Fall</label>
+          <input type="checkbox" name="winter" id="winter" {{checkedOrNot item.winter}}>
+          <label for="winter">Winter</label>
+        </dd>
+        <dd class="checkbox-with-label">
+          <input type="checkbox" name="dirty" id="dirty" {{checkedOrNot item.dirty}}>
+          <label for="dirty">Dirty</label>
+        </dd>
+        <dd class="checkbox-with-label">
+          <input type="checkbox" name="damaged" id="damaged" {{checkedOrNot item.damaged}}>
+          <label for="damaged">Damaged (ripped, stained, etc.)</label>
+        </dd>
+      </dl>
+      <button type="submit" id="new-item-submit">Save</button>
+    </form>
+  </div>
+</script>
+
+<script id="page-header-content-template" type="text/x-handlebars-template">
+  <nav class="page-nav">
+    <ul class="header-nav-ul">
+      <li><a href="#shirts" class="header-nav-link">Shirts</a></li>
+      <li><a href="#pants" class="header-nav-link">Pants</a></li>
+      <li><a href="#sweaters" class="header-nav-link">Sweaters</a></li>
+      <li><a href="#shoes" class="header-nav-link">Shoes</a></li>
+    </ul>
+  </nav>
+</script>

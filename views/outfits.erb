@@ -1,0 +1,133 @@
+<main>
+  <h1>Outfits</h1>
+
+  <form action="#" method="post" class="table-settings" id="table-settings">
+    <dl>
+      <dt class="settings-dt">
+        <input type="checkbox" name="include-sweaters" id="include-sweaters" class="settings-input" checked>
+      </dt>
+      <dd class="settings-dd">
+        <label for="include-sweaters">Include sweaters</label>
+      </dd>
+      <dt class="settings-dt">
+        <input type="checkbox" name="show-images" id="show-images" class="settings-input" checked>
+      </dt>
+      <dd class="settings-dd">
+        <label for="show-images">Show images</label>
+      </dd>
+    </dl>
+  </div>
+
+  <p class="outfits-message"></p>
+
+  <table id="outfits" class="outfits">
+  </table>
+
+  <div class="modal-background hide">
+    <div class="modal outfits-modal">
+    </div>
+  </div>
+</main>
+
+<script id="outfitsTable" type="text/x-handlebars-template">
+  <thead>
+    <th class="outfits-th">Shirt</th>
+    <th class="outfits-th">Pants</th>
+    {{#if includeSweaters}}
+      <th class="outfits-th">Sweater</th>
+    {{/if}}
+    {{#if includeShoes}}
+      <th class="outfits-th">Shoes</th>
+    {{/if}}
+    <th class="outfits-th rating-column">Shirt-Pants</th>
+    {{#if includeSweaters}}
+      <th class="outfits-th rating-column">Shirt-Sweater</th>
+    {{/if}}
+    {{#if includeShoes}}
+      <th class="outfits-th rating-column">Shirt-Shoes</th>
+    {{/if}}
+    {{#if includeSweaters}}
+      <th class="outfits-th rating-column">Pants-Sweater</th>
+    {{/if}}
+    {{#if includeShoes}}
+      <th class="outfits-th rating-column">Pants-Shoes</th>
+    {{/if}}
+    {{#if includeShoes}}
+      <th class="outfits-th rating-column">Sweater-Shoes</th>
+    {{/if}}
+    <th class="outfits-th rating-column">Overall Rating</th>
+    <th class="outfits-th">View</th>
+  </thead>
+  <tbody>
+    {{#each outfits}}
+      <tr data-shirt-id="{{shirtId}}" data-pants-id="{{pantsId}}" data-sweater-id="{{sweaterId}}" data-shoes-id="{{shoesId}}" class="outfits-tr">
+        {{>tableCell item=shirt showImages=../showImages}}
+        {{>tableCell item=pants showImages=../showImages}}
+        {{#if ../includeSweaters}}
+          {{>tableCell item=sweater showImages=../showImages}}
+        {{/if}}
+        {{#if ../includeShoes}}
+          <td class="outfits-td">{{shoes.title}}</td>
+        {{/if}}
+        <td class="outfits-td">{{shirtPantsRating}}</td>
+        {{#if ../includeSweaters}}
+          <td class="outfits-td">{{shirtSweaterRating}}</td>
+        {{/if}}
+        {{#if ../includeShoes}}
+          <td class="outfits-td">{{shirtShoesRating}}</td>
+        {{/if}}
+        {{#if ../includeSweaters}}
+          <td class="outfits-td">{{pantsSweaterRating}}</td>
+        {{/if}}
+        {{#if ../includeShoes}}
+          <td class="outfits-td">{{pantsShoesRating}}</td>
+        {{/if}}
+        {{#if (and ../includeSweaters ../includeShoes)}}
+          <td class="outfits-td">{{sweaterShoesRating}}</td>
+        {{/if}}
+        <td class="outfits-td">{{overallRating}}</td>
+        <td class="outfits-td">
+          <a href="#" class="view-outfit">View outfit</a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</script>
+
+<script id="tableCell" type="text/x-handlebars-template" class="partial">
+  <td class="outfits-td">
+    <div class="outfits-td-contents">
+      {{#if showImages}}
+        <img src="{{item.imagePath}}" alt="" class="thumbnail-smaller">
+      {{/if}}
+      <span class="item-title">{{item.title}}</span>
+    </div>
+  </td>
+</script>
+
+<script id="outfit-modal-template" type="text/x-handlebars-template">
+  <header class="modal-header outfit-modal-header">
+    <button class="btn-zoom btn-zoom-in">
+      <i class="fa-solid fa-magnifying-glass-plus"></i>
+    </button>
+    <button class="btn-zoom btn-zoom-out" disabled>
+      <i class="fa-solid fa-magnifying-glass-minus"></i>
+    </button>
+    <a href="#" class="btn-close">
+      <i class="fa-sharp fa-solid fa-xmark"></i>
+    </a>
+  </header>
+  <div class="modal-body">
+    <figure class="outfit-modal-figure">
+      <img src="{{shirt.imagePath}}" alt="" class="outfit-modal-image" data-zoom="1">
+    </figure>
+    <figure class="outfit-modal-figure">
+      <img src="{{pants.imagePath}}" alt="" class="outfit-modal-image" data-zoom="1">
+    </figure>
+    {{#if sweater}}
+      <figure class="outfit-modal-figure">
+        <img src="{{sweater.imagePath}}" alt="" class="outfit-modal-image" data-zoom="1">
+      </figure>
+    {{/if}}
+  </div>
+</script>

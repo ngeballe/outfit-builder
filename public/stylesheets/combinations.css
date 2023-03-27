@@ -1,0 +1,156 @@
+body {
+  background: #ececef;
+}
+
+.page-header {
+  height: var(--header-height);
+}
+
+.logo-heading {
+  font-size: 1.5rem;
+}
+
+select {
+  outline: none;
+}
+
+.combinations-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 15px 0;
+}
+
+.combinations-th {
+  border: 1px solid #555;
+  background: #dedede;
+  font-weight: normal;
+}
+
+.combinations-thead .combinations-th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  vertical-align: bottom;
+}
+
+.combinations-thead .combinations-th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  background: #dedede;
+}
+
+.combinations-td {
+  border: 1px solid #555;
+  background: #ececef;
+}
+
+.combinations-td label {
+  padding: 0 0 0.2rem 0;
+}
+
+.combinations-td[data-rating="0"] {
+  background: #faa;
+}
+
+.combinations-td[data-rating="5"] {
+  background: #afa;
+}
+
+.combinations-td[data-rating="3"] {
+  background: #ffa;
+}
+
+.combinations-tbody .combinations-th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+}
+
+.combinations-th-item-title {
+  display: inline-block;
+  margin: 0 0 10px 0;
+}
+
+.combinations-th-figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto;
+}
+
+.cell-data-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.view-combination {
+  color: maroon;
+  text-align: center;
+  display: block;
+  margin: 0 0 5px 0;
+}
+
+/***
+ * view-combination modal
+***/
+
+.modal {
+  padding: 0 0.5rem 1.2rem 0.5rem;
+}
+
+.combination-modal-header {
+  padding: 1rem 0 1rem 0;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.combination-modal-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modal-figure-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.combination-modal-figure {
+  width: 400px;
+  max-height: 500px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.combination-modal-image[data-zoom="1"] {
+  width: 400px;
+}
+
+.combination-modal-image[data-zoom="2"] {
+  width: 800px;
+}
+
+.combination-modal-image[data-zoom="3"] {
+  width: 1200px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0 0 0;
+  gap: 2rem;
+}
