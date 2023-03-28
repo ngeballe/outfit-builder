@@ -6,8 +6,6 @@
     <div class="modal">
     </div>
   </div>
-
-  <%= @foo %>
 </main>
 
 <script id="combinations-table-template" type="text/x-handlebars-template">
@@ -63,6 +61,9 @@
 
 <script id="combination-modal-template" type="text/x-handlebars-template">
   <header class="modal-header combination-modal-header">
+    <a href="#" class="btn-help" title="Help & keyboard shortcuts" data-help-misc="foo">
+      <i class="fa-solid fa-circle-question"></i>
+    </a>
     <p>Rating: {{> ratingSelectMenu rating=rating }}</p>
     <div class="btn-group-zoom">
       <button class="btn-zoom btn-zoom-in">
@@ -78,32 +79,53 @@
   </header>
   <div class="modal-body combination-modal-body" data-column-id="{{item1.id}}" data-row-id="{{item2.id}}">
     <div class="arrow-container">
-      <button class="btn-scroll" id="btn-scroll-left">
-        <i class="fa-solid fa-angle-left" title="Previous in row"></i>
+      <button class="btn-swipe btn-swipe-left help-text-parent" id="btn-swipe-left" title="Swipe left" data-rating="bad">
+        <i class="fa-solid fa-thumbs-down"></i>
+        <div class="help-text hide" data-top="105%" data-left="0">
+          <p class="help-description">Rate the combination "bad" and show next unrated combination</p>
+          <p class="help-shortcuts">Shortcut:
+            <span class="key"><-</span> or <span class="key">b</span>
+          </p>
+        </div>
       </button>
     </div>
-    <div class="modal-figure-container">
+    <div class="modal-figure-container help-text-parent">
       <figure class="combination-modal-figure">
         <img src="{{item1.imagePath}}" alt="" class="combination-modal-image" data-zoom="1">
       </figure>
       <figure class="combination-modal-figure">
         <img src="{{item2.imagePath}}" alt="" class="combination-modal-image" data-zoom="1">
       </figure>
+      <div class="help-text hide" data-top="0%" data-left="0%">
+        <p class="help-description">To mark the combination "okay" and move on:</p>
+        <p class="help-shortcuts">Shortcut:
+          <span class="key">o</span> or <span class="key">/</span>
+        </p>
+      </div>
     </div>
     <div class="arrow-container">
-      <button class="btn-scroll" id="btn-scroll-right">
-        <i class="fa-solid fa-angle-right" title="Next  in row"></i>
+      <button class="btn-swipe btn-swipe-right help-text-parent" id="btn-swipe-right" title="Swipe right" data-rating="good">
+        <i class="fa-solid fa-thumbs-up"></i>
+        <div class="help-text hide" data-top="105%" data-left="-5%">
+          <p class="help-description">Rate the combination "good" and show next unrated combination</p>
+          <p class="help-shortcuts">Shortcut:
+            <span class="key">-></span> or <span class="key">g</span>
+          </p>
+        </div>
       </button>
     </div>
   </div>
-  <footer class="modal-footer">
-    <button class="btn-scroll" id="btn-scroll-up">
-      <i class="fa-solid fa-angle-up" title="Previous in column"></i>
+  <div class="modal-footer">
+    <button class="btn-skip help-text-parent" title="Show next unrated combination">
+      <span>Next</span>
+      <div class="help-text hide" data-top="-100%" data-left="103%">
+        <p class="help-description">Show next unrated combination</p>
+        <p class="help-shortcuts">Shortcut:
+          <span class="key">s</span> or <span class="key">Spacebar</span>
+        </p>
+      </div>
     </button>
-    <button class="btn-scroll" id="btn-scroll-down">
-      <i class="fa-solid fa-angle-down" title="Next in column"></i>
-    </button>
-  </footer>
+  </div>
 </script>
 
 <script id="type-selector" type="text/x-handlebars-template">

@@ -129,7 +129,7 @@ main {
 ***/
 
 .modal-background {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.6);
   top: 0;
   left: 0;
   right: 0;
@@ -156,17 +156,6 @@ main {
 
 .modal-heading {
   text-align: center;
-}
-
-.btn-scroll {
-  cursor: pointer;
-  width: 3rem;
-  height: 3rem;
-  box-sizing: border-box;
-}
-
-.btn-scroll i {
-  font-size: 1.8rem;
 }
 
 .btn-close {

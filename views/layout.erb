@@ -7,16 +7,16 @@
     <script src="javascripts/handlebars-4.7.7.js"></script>
     <link rel="stylesheet" href="/fontawesome-pro-6.3.0-web/css/all.css">
     <link rel="stylesheet" href="/fontawesome-pro-6.3.0-web/css/sharp-solid.css">
-    <link rel="stylesheet" href="/stylesheets/application.css?1.0" />
+    <link rel="stylesheet" href="/stylesheets/application.css?2.0" />
     <% if @current_page_stylesheet %>
-      <link rel="stylesheet" href="/stylesheets/<%= @current_page_stylesheet %>?1.0" />
+      <link rel="stylesheet" href="/stylesheets/<%= @current_page_stylesheet %>?5.0" />
     <% end %>
     <script src="/data/seeds.js"></script>
     <script src="/javascripts/item.js?1.0"></script>
-    <script src="/javascripts/app.js?1.0"></script>
+    <script src="/javascripts/app.js?2.0"></script>
     <script src="/javascripts/page.js?1.0"></script>
     <% @current_page_scripts.each do |script| %>
-      <script src="/javascripts/<%= script %>?1.0"></script>
+      <script src="/javascripts/<%= script %>?2.0"></script>
     <% end %>
   </head>
   <body>

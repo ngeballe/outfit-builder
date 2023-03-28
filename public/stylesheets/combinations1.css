@@ -101,7 +101,7 @@ select {
 ***/
 
 .modal {
-  padding: 0 0.5rem 1.2rem 0.5rem;
+  padding: 0 0.5rem 0.5rem 0.5rem;
 }
 
 .combination-modal-header {
@@ -111,11 +111,42 @@ select {
   gap: 2rem;
 }
 
+.btn-help {
+  position: absolute;
+  top: 1rem;
+  left: 1.5rem;
+}
+
+.btn-help i {
+  font-size: 1.6rem;
+  color: #555;
+}
+
 .combination-modal-body {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
+}
+
+.btn-swipe {
+  color: #444;
+  cursor: pointer;
+  width: 3rem;
+  height: 3rem;
+  box-sizing: border-box;
+}
+
+#btn-swipe-right {
+  color: green;
+}
+
+#btn-swipe-left {
+  color: #f33;
+}
+
+.btn-swipe i {
+  font-size: 1.8rem;
 }
 
 .modal-figure-container {
@@ -148,9 +179,52 @@ select {
 }
 
 .modal-footer {
+  padding: 1.2rem;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 1rem 0 0 0;
-  gap: 2rem;
+  justify-content: center;
+}
+
+.btn-skip {
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+
+.help-text-parent {
+  position: relative;
+}
+
+.help-text {
+  display: block;
+  position: absolute;
+  padding: 5px;
+  width: 160px;
+  height: 95px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffa;
+  border: 1px solid #55a;
+  z-index: 100;
+  font-size: 0.9rem;
+}
+
+.help-description {
+  color: navy;
+  text-align: center;
+}
+
+.help-shortcuts {
+  text-align: center;
+  color: orangered;
+}
+
+.key {
+  background: #eaeaea;
+  border: 1px solid #666;
+  padding: 0.2rem;
+  display: inline-block;
+  border-radius: 5px;
+  color: #000;
 }

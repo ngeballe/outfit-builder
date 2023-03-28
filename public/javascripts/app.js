@@ -196,6 +196,7 @@ const App = {
   },
 
   updateLocalStorage() {
+    console.log(this.findItem('shirt', 5));
     localStorage.setItem('outfits', JSON.stringify({
         items: this.items,
         combinations: this.combinations,
@@ -326,8 +327,7 @@ const App = {
 
   init() {
     this.loadLocalStorageData();
-    this.addMyData();
-
+    // this.addMyData();
     this.updateLocalStorage();
   },
 };

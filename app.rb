@@ -1,7 +1,9 @@
 require 'sinatra'
 require 'pry'
+require_relative 'database_storage.rb'
 
 before do
+  # @storage ||= DatabaseStorage.new(logger)
   @header_nav_links = [
     {
       href: '/items',
@@ -39,7 +41,7 @@ get '/items' do
 end
 
 get '/combinations' do
-  @current_page_stylesheet = 'combinations.css'
+  @current_page_stylesheet = 'combinations1.css'
   @current_page_scripts = ['combinations.js']
   erb :combinations
 end

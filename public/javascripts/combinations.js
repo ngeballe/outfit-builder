@@ -48,6 +48,7 @@ Object.assign(CombinationsPage, {
 
   bindMoreEvents() {
     this.bindSelectEvents();
+
     document.querySelector('#combinations-table').addEventListener('click', event => {
       if (event.target.closest('.view-combination')) {
         event.preventDefault();
@@ -91,8 +92,17 @@ Object.assign(CombinationsPage, {
 
     this.modal.querySelector('select').addEventListener('change', this.handleModalRatingSelect.bind(this, columnId, rowId, columnType, rowType, td));
 
-    this.modal.querySelectorAll('.btn-scroll').forEach(btnScroll => {
-      btnScroll.addEventListener('click', this.handleModalScroll.bind(this, columnId, rowId, columnType, rowType, td));
+    this.modal.querySelectorAll('.btn-swipe').forEach(btnSwipe => {
+      btnSwipe.addEventListener('click', this.handleModalSwipe.bind(this));
+    });
+
+    this.modal.querySelector('.btn-skip').addEventListener('click', (event) => {
+      this.rateAndMove(null);
+    });
+
+    this.modal.querySelector('.btn-help').addEventListener('click', event => {
+      event.preventDefault();
+      this.showHelp(event);
     });
   },
 
@@ -107,6 +117,28 @@ Object.assign(CombinationsPage, {
       event.preventDefault();
       this.handleKeydownInModalOLD(key);
     }
+  },
+
+  showHelp(event, duration = 20) {
+    document.querySelectorAll('.help-text').forEach(helpTextElem => {
+      ['top', 'left', 'bottom', 'right'].forEach(position => {
+        if (helpTextElem.dataset[position]) {
+          helpTextElem.style[position] = helpTextElem.dataset[position];
+        }
+      });
+      helpTextElem.classList.remove('hide');
+    });
+    if (duration) {
+      setTimeout(() => {
+        this.hideHelp();
+      }, duration * 1000);
+    }
+  },
+
+  hideHelp() {
+    document.querySelectorAll('.help-text').forEach(helpTextElem => {
+      helpTextElem.classList.add('hide');
+    });
   },
 
   handleKeydownInModalOLD(key) {
@@ -136,34 +168,39 @@ Object.assign(CombinationsPage, {
   },
 
   handleKeydownInModalTinder(key) {
+    if (key === 'ArrowRight' || key == 'g') {
+      this.rateAndMove('good');
+    } else if (key === 'ArrowLeft' || key === 'b') {
+      this.rateAndMove('bad');
+    } else if (key === 'o' || key === '/') { // 'o' as in okay
+      this.rateAndMove('okay');
+    } else if (key === 's' || key === ' ') { // 's' as in skip
+      this.rateAndMove(null);
+    }
+  },
+
+  rateAndMove(ratingChoice) {
     const valueGood = '5';
     const valueOkay = '3';
     const valueBad = '0';
-    const selectEl = this.modal.querySelector('select');
     const SHOW_UNRATED_COMBOS_ONLY = true;
-
-    if (key === 'ArrowRight') {
+    const selectEl = this.modal.querySelector('select');
+    if (ratingChoice === 'good') {
       this.changeSelect(selectEl, valueGood);
       this.showNextCombination(SHOW_UNRATED_COMBOS_ONLY);
-    } else if (key === 'ArrowLeft') {
+    } else if (ratingChoice === 'bad') {
       this.changeSelect(selectEl, valueBad);
       this.showNextCombination(SHOW_UNRATED_COMBOS_ONLY);
-    } else if (key === 'o' || key === '/') { // 'o' as in okay
+    } else if (ratingChoice === 'okay') {
       this.changeSelect(selectEl, valueOkay);
       this.showNextCombination(SHOW_UNRATED_COMBOS_ONLY);
-    } else if (key === 's' || key === ' ') { // 's' as in skip
+    } else if (ratingChoice === null) {
       this.showNextCombination(SHOW_UNRATED_COMBOS_ONLY);
     }
   },
 
   showNextCombination(unratedOnly = true) {
     const table = this.tableContainer.querySelector('table');
-    // const typeString = table.dataset.columnType + '-' + table.dataset.rowType;
-    // get all combinations
-    // let combinations = App.combinations[typeString];
-    // if unratedOnly, filter by unrated
-
-    // get this row & column id -- to ensure next isn't this if skipping
     const modalBodyEl = this.modal.querySelector('.modal-body');
     const currentRowId = +modalBodyEl.dataset.rowId;
     const currentColumnId = +modalBodyEl.dataset.columnId;
@@ -200,32 +237,9 @@ Object.assign(CombinationsPage, {
     selectEl.dispatchEvent(new Event('change'));
   },
 
-  handleModalScroll(columnId, rowId, columnType, rowType, td) {
-    const btnId = event.currentTarget.id;
-
-    let rowIndex = +td.closest('tr').dataset.rowIndex;
-    let columnIndex = +td.dataset.columnIndex;
-
-    const lastRowIndex = document.querySelectorAll('tbody tr').length - 1;
-    const lastColumnIndex = document.querySelectorAll('tbody tr:first-child td').length - 1;
-
-    if (btnId === 'btn-scroll-down') {
-      rowIndex = cycleValueUp(rowIndex, lastRowIndex);
-    } else if (btnId === 'btn-scroll-up') {
-      rowIndex = cycleValueDown(rowIndex, lastRowIndex);
-    } else if (btnId === 'btn-scroll-right') {
-      columnIndex = cycleValueUp(columnIndex, lastColumnIndex);
-    } else if (btnId === 'btn-scroll-left') {
-      columnIndex = cycleValueDown(columnIndex, lastColumnIndex);
-    }
-
-    // update cell
-    td = document.querySelector(`#combinations-table tr[data-row-index="${rowIndex}"] td[data-column-index="${columnIndex}"]`);
-    rowId = +td.dataset.rowId;
-    columnId = +td.dataset.columnId;
-    console.log({ columnId, rowId, columnType, rowType, td });
-
-    this.showCombinationModal(columnId, rowId, columnType, rowType, td);
+  handleModalSwipe(event) {
+    const rating = event.target.dataset.rating;
+    this.rateAndMove(rating);
   },
 
   hideModal() {
@@ -277,5 +291,6 @@ Object.assign(CombinationsPage, {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log(new Date());
   CombinationsPage.init().run();
 });
