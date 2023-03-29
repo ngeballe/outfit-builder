@@ -30,6 +30,12 @@ const Page = {
     Handlebars.registerHelper('checkedOrNot', function(boolean) {
       return boolean ? 'checked' : '';
     });
+    Handlebars.registerHelper('commaJoin', function(array) {
+      return array.join(', ');
+    });
+    Handlebars.registerHelper('join', function(array, delimiter) {
+      return array.join(delimiter);
+    });
   },
 
   handleKeyup(event) {

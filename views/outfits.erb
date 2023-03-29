@@ -2,18 +2,30 @@
   <h1>Outfits</h1>
 
   <form action="#" method="post" class="table-settings" id="table-settings">
-    <dl>
+    <dl class="settings-dl">
       <dt class="settings-dt">
-        <input type="checkbox" name="include-sweaters" id="include-sweaters" class="settings-input" checked>
+        <label for="include-sweaters">Include sweaters</label>
       </dt>
       <dd class="settings-dd">
-        <label for="include-sweaters">Include sweaters</label>
+        <input type="checkbox" name="include-sweaters" id="include-sweaters" class="settings-input">
       </dd>
       <dt class="settings-dt">
-        <input type="checkbox" name="show-images" id="show-images" class="settings-input" checked>
+        <label for="show-images">Show images</label>
       </dt>
       <dd class="settings-dd">
-        <label for="show-images">Show images</label>
+        <input type="checkbox" name="show-images" id="show-images" class="settings-input" checked>
+      </dd>
+      <dt class="settings-dt">
+        <label for="seasons">Seasons</label>
+      </dt>
+      <dd class="settings-dd">
+        <select name="seasons" id="seasons" class="seasons">
+          <option value="all">All</option>
+          <option value="spring">Spring</option>
+          <option value="summer">Summer</option>
+          <option value="fall">Fall</option>
+          <option value="winter">Winter</option>
+        </select>
       </dd>
     </dl>
   </div>
@@ -56,6 +68,7 @@
       <th class="outfits-th rating-column">Sweater-Shoes</th>
     {{/if}}
     <th class="outfits-th rating-column">Overall Rating</th>
+    <th class="outfits-th">Seasons</th>
     <th class="outfits-th">View</th>
   </thead>
   <tbody>
@@ -86,6 +99,9 @@
           <td class="outfits-td">{{sweaterShoesRating}}</td>
         {{/if}}
         <td class="outfits-td">{{overallRating}}</td>
+        <td class="outfits-td">
+          {{commaJoin seasons}}
+        </td>
         <td class="outfits-td">
           <a href="#" class="view-outfit">View outfit</a>
         </td>

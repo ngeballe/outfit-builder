@@ -151,6 +151,7 @@ const App = {
       const value = this.findCombinations(pair[0], pair[1]);
       this.combinations[key] = value;
     });
+    this.updateLocalStorage();
   },
 
   findCombination(type1, type2, id1, id2) {
@@ -196,7 +197,6 @@ const App = {
   },
 
   updateLocalStorage() {
-    console.log(this.findItem('shirt', 5));
     localStorage.setItem('outfits', JSON.stringify({
         items: this.items,
         combinations: this.combinations,

@@ -138,11 +138,11 @@ select {
 }
 
 #btn-swipe-right {
-  color: green;
+  color: #070;
 }
 
 #btn-swipe-left {
-  color: #f33;
+  color: #900;
 }
 
 .btn-swipe i {
@@ -227,4 +227,21 @@ select {
   display: inline-block;
   border-radius: 5px;
   color: #000;
+}
+
+.reset-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 1rem 1rem;
+}
+
+.btn-reset {
+  background: hsl(0, 70%, 80%);
+  padding: 0.5rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 1px 1px 1px 2px #777;
+  cursor: pointer;
 }

@@ -2,13 +2,15 @@ const OutfitsPage = Object.create(Page);
 
 Object.assign(OutfitsPage, {
   tableSettings: {
-    includeSweaters: true,
+    includeSweaters: false,
     includeShoes: false,
     showImages: true,
+    seasons: ['spring', 'summer', 'winter', 'fall'],
   },
 
-  renderOutfits(settings) {
-    const { includeSweaters, includeShoes, showImages } = settings;
+  renderOutfits() {
+    const { includeSweaters, includeShoes, showImages, seasons: seasonsSetting } = this.tableSettings;
+
     const shirtIds = App.itemIdsByType('shirt');
     const pantsIds = App.itemIdsByType('pants');
     const sweaterIds = App.itemIdsByType('sweater');
@@ -36,6 +38,9 @@ Object.assign(OutfitsPage, {
     document.querySelector('.outfits-message').textContent = '';
     this.addRatings(validOutfits);
     validOutfits = this.updateWithFullItems(validOutfits);
+
+    console.log({ seasonsSetting });
+    validOutfits = this.updateWithSeasons(validOutfits, seasonsSetting);
 
     validOutfitsSorted = sortBy(validOutfits, 'overallRating', true);
 
@@ -111,20 +116,40 @@ Object.assign(OutfitsPage, {
     });
   },
 
+  updateWithSeasons(validOutfits, seasonsSetting) {
+    const result = [];
+    const seasons = App.SEASONS;
+
+    validOutfits.forEach(outfit => {
+      const { shirt, pants, sweater } = outfit;
+      // seasons for which all items are true
+      const validSeasons = seasons.filter(season => {
+        return shirt[season] && pants[season] && (!sweater || sweater[season]);
+      });
+      if (validSeasons.some(season => seasonsSetting.includes(season))) {
+        const outfitWithSeasons = Object.assign(outfit, { seasons: validSeasons });
+        result.push(outfitWithSeasons);
+      }
+    });
+
+    return result;
+  },
+
   bindMoreEvents() {
     this.includeSweatersSelect.addEventListener('change', this.handleIncludeSweatersSetting.bind(this));
     this.showImagesSelect.addEventListener('change', this.handleShowImagesSetting.bind(this));
+    document.querySelector('#seasons').addEventListener('change', this.handleSeasonsSelect.bind(this));
     this.outfitsTable.addEventListener('click', this.handleOutfitsTableClick.bind(this));
   },
 
   handleIncludeSweatersSetting(event) {
     this.tableSettings.includeSweaters = event.target.checked;
-    this.renderOutfits(this.tableSettings);
+    this.renderOutfits();
   },
 
   handleShowImagesSetting(event) {
     this.tableSettings.showImages = event.target.checked;
-    this.renderOutfits(this.tableSettings);
+    this.renderOutfits();
   },
 
   handleOutfitsTableClick(event) {
@@ -148,6 +173,17 @@ Object.assign(OutfitsPage, {
     this.modalBackground.classList.remove('hide');
   },
 
+  handleSeasonsSelect(event) {
+    const value = event.target.value;
+    if (value === 'all') {
+      this.tableSettings.seasons = App.SEASONS.map(s => s.toLowerCase());
+    } else {
+      this.tableSettings.seasons = [value];
+    }
+
+    this.renderOutfits();
+  },
+
   init() {
     Page.init();
 
@@ -165,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   OutfitsPage.run = function() {
-    this.renderOutfits(this.tableSettings);
+    this.renderOutfits();
     this.bindMoreEvents();
   };
 

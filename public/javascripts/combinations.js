@@ -26,6 +26,7 @@ Object.assign(CombinationsPage, {
       return rowData;
     });
 
+    console.log('rendering...');
     this.tableContainer.innerHTML = this.templates['combinations-table-template']({columnItems, rowItems, columnType, rowType, combinationsMatrix });
   },
 
@@ -65,6 +66,15 @@ Object.assign(CombinationsPage, {
     document.addEventListener('keydown', this.handleKeydown.bind(this));
 
     this.typesSelectEl.addEventListener('change', this.updateTable.bind(this));
+
+    document.querySelector('#btn-reset').addEventListener('click', event => {
+      const ok = confirm('Are you sure you want to delete all combinations? Cannot undo.');
+      if (ok) {
+        // console.log('DELETE');
+        App.resetCombinations();
+        this.renderCombinations();
+      }
+    });
   },
 
   updateTable(event) {
