@@ -27,6 +27,18 @@
           <option value="winter">Winter</option>
         </select>
       </dd>
+      <dt class="settings-dt">
+        <label for="seasons">Include dirty</label>
+      </dt>
+      <dd class="settings-dd">
+        <input type="checkbox" name="include-dirty" id="include-dirty" class="settings-input" checked>
+      </dd>
+      <dt class="settings-dt">
+        <label for="seasons">Include damaged</label>
+      </dt>
+      <dd class="settings-dd">
+        <input type="checkbox" name="include-damaged" id="include-damaged" class="settings-input" checked>
+      </dd>
     </dl>
   </div>
 
@@ -69,6 +81,7 @@
     {{/if}}
     <th class="outfits-th rating-column">Overall Rating</th>
     <th class="outfits-th">Seasons</th>
+    <th class="outfits-th">Dirty/Damaged Status</th>
     <th class="outfits-th">View</th>
   </thead>
   <tbody>
@@ -101,6 +114,9 @@
         <td class="outfits-td">{{overallRating}}</td>
         <td class="outfits-td">
           {{commaJoin seasons}}
+        </td>
+        <td class="outfits-td">
+          {{dirtyDamagedStatus shirt pants sweater}}
         </td>
         <td class="outfits-td">
           <a href="#" class="view-outfit">View outfit</a>

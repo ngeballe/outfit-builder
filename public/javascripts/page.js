@@ -36,6 +36,28 @@ const Page = {
     Handlebars.registerHelper('join', function(array, delimiter) {
       return array.join(delimiter);
     });
+    Handlebars.registerHelper('dirtyDamagedStatus', function(shirt, pants, sweater) {
+      const items = [shirt, pants];
+      if (sweater) {
+        items.push(sweater);
+      }
+      const reports = items.reduce((reportsSoFar, item) => {
+        const type = item.type;
+        let problems = [];
+        if (item.dirty) {
+          problems.push('dirty');
+        }
+        if (item.damaged) {
+          const verb = type === 'pants' ? 'need' : 'needs';
+          problems.push(`${verb} mending`);
+        }
+        if (problems.length > 0) {
+          reportsSoFar.push(`${type} ${problems.join(' and ')}`);
+        }
+        return reportsSoFar;
+      }, []);
+      return reports.join(', ');
+    });
   },
 
   handleKeyup(event) {

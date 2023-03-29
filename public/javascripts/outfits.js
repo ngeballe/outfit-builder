@@ -1,15 +1,20 @@
 const OutfitsPage = Object.create(Page);
 
 Object.assign(OutfitsPage, {
-  tableSettings: {
-    includeSweaters: false,
-    includeShoes: false,
-    showImages: true,
-    seasons: ['spring', 'summer', 'winter', 'fall'],
+  // change these in HTML or (better) on back end with Ruby variable
+  initTableSettings() {
+    this.tableSettings = {
+      includeSweaters: document.querySelector('#include-sweaters').checked,
+      includeShoes: false,
+      showImages: document.querySelector('#show-images').checked,
+      seasons: ['spring', 'summer', 'winter', 'fall'],
+      includeDirty: document.querySelector('#include-dirty').checked,
+      includeDamaged: document.querySelector('#include-damaged').checked,
+    };
   },
 
   renderOutfits() {
-    const { includeSweaters, includeShoes, showImages, seasons: seasonsSetting } = this.tableSettings;
+    const { includeSweaters, includeShoes, showImages, seasons: seasonsSetting, includeDirty, includeDamaged } = this.tableSettings;
 
     const shirtIds = App.itemIdsByType('shirt');
     const pantsIds = App.itemIdsByType('pants');
@@ -29,18 +34,18 @@ Object.assign(OutfitsPage, {
       debugger;
     }
 
+    document.querySelector('.outfits-message').textContent = '';
+    this.addRatings(validOutfits);
+
+    validOutfits = this.updateWithFullItems(validOutfits);
+    validOutfits = this.updateWithSeasons(validOutfits, seasonsSetting);
+    validOutfits = this.filterBasedOnDirtyAndDamaged(validOutfits, includeDirty, includeDamaged);
+
     if (validOutfits.length === 0) {
       document.querySelector('.outfits-message').textContent = 'No outfits found. Go set some combinations.';
       this.outfitsTable.innerHTML = '';
       return;
     }
-
-    document.querySelector('.outfits-message').textContent = '';
-    this.addRatings(validOutfits);
-    validOutfits = this.updateWithFullItems(validOutfits);
-
-    console.log({ seasonsSetting });
-    validOutfits = this.updateWithSeasons(validOutfits, seasonsSetting);
 
     validOutfitsSorted = sortBy(validOutfits, 'overallRating', true);
 
@@ -83,6 +88,9 @@ Object.assign(OutfitsPage, {
   },
 
   addRatings(validOutfits) {
+    if (validOutfits.length === 0) {
+      return validOutfits;
+    }
     // mutates validOutfits
     const ratingKeys = Object.keys(validOutfits[0])
                              .filter(name => name.endsWith('Rating'));
@@ -135,10 +143,29 @@ Object.assign(OutfitsPage, {
     return result;
   },
 
+  filterBasedOnDirtyAndDamaged(validOutfits, includeDirty, includeDamaged) {
+    return validOutfits.filter(outfit => {
+      const items = this.findItems(outfit);
+      const okOnDirtyFront = includeDirty || items.every(item => !item.dirty);
+      const okOnDamagedFront = includeDamaged || items.every(item => !item.damaged);
+      return okOnDirtyFront && okOnDamagedFront;
+    });
+  },
+
+  findItems(outfit) {
+    const items = [outfit.shirt, outfit.pants];
+    if (outfit.sweater) {
+      items.push(outfit.sweater);
+    }
+    return items;
+  },
+
   bindMoreEvents() {
-    this.includeSweatersSelect.addEventListener('change', this.handleIncludeSweatersSetting.bind(this));
-    this.showImagesSelect.addEventListener('change', this.handleShowImagesSetting.bind(this));
+    this.includeSweatersCheckbox.addEventListener('change', this.handleIncludeSweatersSetting.bind(this));
+    this.showImagesCheckbox.addEventListener('change', this.handleShowImagesSetting.bind(this));
     document.querySelector('#seasons').addEventListener('change', this.handleSeasonsSelect.bind(this));
+    this.includeDirtyCheckbox.addEventListener('change', this.handleIncludeDirtySetting.bind(this));
+    this.includeDamagedCheckbox.addEventListener('change', this.handleIncludeDamagedSetting.bind(this));
     this.outfitsTable.addEventListener('click', this.handleOutfitsTableClick.bind(this));
   },
 
@@ -149,6 +176,16 @@ Object.assign(OutfitsPage, {
 
   handleShowImagesSetting(event) {
     this.tableSettings.showImages = event.target.checked;
+    this.renderOutfits();
+  },
+
+  handleIncludeDirtySetting(event) {
+    this.tableSettings.includeDirty = event.target.checked;
+    this.renderOutfits();
+  },
+
+  handleIncludeDamagedSetting(event) {
+    this.tableSettings.includeDamaged = event.target.checked;
     this.renderOutfits();
   },
 
@@ -187,9 +224,13 @@ Object.assign(OutfitsPage, {
   init() {
     Page.init();
 
+    this.initTableSettings();
+
     this.outfitsTable = document.querySelector('#outfits');
-    this.includeSweatersSelect = document.querySelector('#include-sweaters');
-    this.showImagesSelect = document.querySelector('#show-images');
+    this.includeSweatersCheckbox = document.querySelector('#include-sweaters');
+    this.showImagesCheckbox = document.querySelector('#show-images');
+    this.includeDirtyCheckbox = document.querySelector('#include-dirty');
+    this.includeDamagedCheckbox = document.querySelector('#include-damaged');
   },
 });
 
