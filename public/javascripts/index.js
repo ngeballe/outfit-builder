@@ -20,6 +20,7 @@ Object.assign(IndexPage, {
 
     // modal delete event
     this.modal.addEventListener('click', this.handleModalClick.bind(this));
+    document.addEventListener('keyup', this.handleModalKeyup.bind(this));
 
     this.pageNav.addEventListener('click', this.handlePageNavClick.bind(this));
   },
@@ -46,6 +47,61 @@ Object.assign(IndexPage, {
       const itemId = +editButton.dataset.id;
       const itemType = editButton.dataset.itemType;
       this.showEditItemModal(itemType, itemId);
+    }
+
+    const currentArrowButton = event.target.closest('.btn-arrow');
+
+    if (currentArrowButton) {
+      this.handleArrowButton(currentArrowButton);
+    }
+  },
+
+  handleModalKeyup(event) {
+    const modalOpen = !document.querySelector('.modal-background').classList.contains('hide');
+    if (!modalOpen) {
+      return;
+    }
+
+    event.preventDefault();
+    const key = event.key;
+    const clickEvent = new MouseEvent('click', { bubbles: true });
+
+    if (key === 'ArrowRight') {
+      const rightArrowButton = document.querySelector('.modal .btn-arrow-right');
+      rightArrowButton.dispatchEvent(clickEvent);
+    } else if (key === 'ArrowLeft') {
+      const leftArrowButton = document.querySelector('.modal .btn-arrow-left');
+      leftArrowButton.dispatchEvent(clickEvent);
+    }
+  },
+
+  handleArrowButton(currentArrowButton) {
+    const modalBody = currentArrowButton.closest('.modal-body');
+    const currentId = modalBody.dataset.itemId;
+    const currentType = modalBody.dataset.itemType;
+
+    const itemLinksOnPage = Array.from(document.querySelectorAll('.item-link'));
+    const maxItemIndex = itemLinksOnPage.length - 1;
+    const currentIndex = itemLinksOnPage.findIndex(link => {
+      return link.dataset.id === currentId && link.dataset.type === currentType;
+    });
+
+    if (currentIndex === undefined) {
+      alert("Index not found. Something is wrong.");
+      return;
+    }
+
+    if (currentArrowButton.classList.contains('btn-arrow-right')) {
+      const nextItemIndex = cycleValueUp(currentIndex, maxItemIndex);
+      const nextItemLink = itemLinksOnPage[nextItemIndex];
+      const { type, id } = nextItemLink.dataset;
+      this.showItemModal(type, +id);
+    } else if (currentArrowButton.classList.contains('btn-arrow-left')) {
+      const prevItemIndex = cycleValueDown(currentIndex, maxItemIndex);
+      const prevItemLink = itemLinksOnPage[prevItemIndex];
+      const { type, id } = prevItemLink.dataset;
+      const prevItem = itemLinksOnPage[prevItemIndex];
+      this.showItemModal(type, +id);
     }
   },
 
@@ -81,7 +137,7 @@ Object.assign(IndexPage, {
     const item = App.findItem(type, id);
 
     // const categoryTitle = properCase(category);
-    this.modal.innerHTML = this.templates['show-item-template'](item);
+    this.modal.innerHTML = this.templates['show-item-template']( item);
 
     this.modalBackground.classList.remove('hide');
   },

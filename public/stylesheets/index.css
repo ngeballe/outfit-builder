@@ -1,26 +1,73 @@
+.page-header-content {
+  margin-left: 5rem;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.add-button-nav {
+  padding: 0.8rem 1rem 0.5rem;
+}
+
+.btn-add-item {
+  background: lightgreen;
+  padding: 0.9rem 1.2rem;
+  border-radius: 5px;
+  display: block;
+  border: 1px solid #777;
+  box-shadow: 2px 2px 3px 1px #9c9c9c;
+}
+
+.btn-add-item:hover {
+  background: green;
+  color: #fff;
+}
+
 .items {
-  margin: calc(-1 * var(--header-height)) 0 0 0;
-  padding: 0 1rem;
+  margin: 0 0 0 0;
 }
 
 .item-section {
   padding: calc(var(--header-height) + 1rem) 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item-section:first-child {
+  padding: 0.5rem 0 0 0;
 }
 
 .item-section-heading {
-  padding: 0 0 0.5rem 0;
+  padding: 0 0 0.8rem 0;
 }
 
 .item-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 1.5rem;
   margin: 0 auto;
+  gap: 1.2rem 1.2rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin: 0 auto;
+}
+
+.item-li {
+  background: #eee;
+  display: flex;
+  box-shadow: 2px 2px 3px 1px #9c9c9c;
+  max-width: 200px;
+}
+
+.item-link {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-li:hover {
+  background: #ffe;
 }
 
 .item-figure {
   border: 1px solid #777;
-  width: 200px;
   height: 180px;
   display: flex;
   align-items: center;
@@ -29,7 +76,7 @@
 }
 
 .item-img-thumb {
-  width: 300px;
+  width: 100%;
   display: block;
 }
 
@@ -45,16 +92,94 @@
   width: 1200px;
 }
 
+.item-info {
+  flex: 1;
+  width: 200px;
+  height: 80px;
+  font-size: 0.9rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0.25rem 0.5rem 0.25rem;
+  box-sizing: border-box;
+}
+
 .item-title {
   text-align: center;
   font-weight: normal;
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0.25rem;
   width: 200px;
+}
+
+.item-icon-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.item-icon-tag {
+  font-size: 1.4rem;
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-icon-tag i {
+  display: inline-block;
+}
+
+.item-icon-tag[data-name="summer"] {
+  background: lightskyblue;
+}
+
+.fa-flower-tulip {
+  color: red;
+  --fa-secondary-opacity: 1;
+  --fa-secondary-color: green
+}
+
+.fa-sun {
+  color: yellow;
+  --fa-primary-opacity: 1;
+  --fa-secondary-opacity: 1;
+  --fa-secondary-color: orange;
+}
+
+.fa-leaf-maple {
+  color: transparent;
+  background: linear-gradient(orange, red);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.fa-snowflake {
+  color: white;
+  text-shadow: 1px 2px 5px black;
+}
+
+.fa-washing-machine {
+  background: white;
+  font-size: 1.4rem;
 }
 
 /***
  * modal
 ***/
+
+.modal {
+  min-width: 500px;
+}
+
+.modal-show-item-body {
+  display: flex;
+  flex-direction: row;
+}
 
 .modal-header {
   justify-content: center;
@@ -85,7 +210,25 @@
   cursor: pointer;
 }
 
-.modal-figure {
+.modal-show-item-arrow-container {
+  width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-arrow {
+  border: none;
+  cursor: pointer;
+  font-size: 2.5rem;
+  color: #777;
+}
+
+.btn-arrow:hover {
+  color: #555;
+}
+
+.modal-show-item-figure {
   width: 400px;
   max-height: 500px;
   margin: 0 auto;
@@ -113,12 +256,6 @@
   width: 1200px;
 }
 
-.item-show-modal-title {
-  text-align: center;
-  font-weight: normal;
-  padding: 0.75rem 0 1rem 0;
-}
-
 .checkbox-with-label {
   display: grid;
   grid-template-columns: 1rem 1fr;
@@ -130,6 +267,43 @@
   margin: 0;
 }
 
+/***
+ * modal-item-info
+***/
+
+.modal-item-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1rem 1.2rem 1rem;
+}
+
+.item-show-modal-title {
+  text-align: center;
+  font-weight: normal;
+  padding: 0 0 0.8rem 0;
+}
+
+
+.item-tag {
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-right: 5px;
+  border: 1px solid #aaa;
+}
+
+.item-tag-one-season {
+  background: hsl(30, 100%, 90%);
+}
+
+.item-tag.item-tag-all-seasons {
+  background: hsl(100, 100%, 90%);
+}
+
+.item-tag.item-tag-flaw {
+  background: hsl(0, 100%, 90%);
+}
 
 
 /***
@@ -142,6 +316,16 @@
 
 .combination-link {
   color: maroon;
-  display: block;
+  display: inline-block;
   padding: 0.5rem;
+}
+
+@media (max-width: 1000px) {
+  .item-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .item-title {
+/*    color: blue;*/
+  }
 }

@@ -58,6 +58,51 @@ const Page = {
       }, []);
       return reports.join(', ');
     });
+    Handlebars.registerHelper('seasonTags', function(item) {
+      const tags = [];
+      const seasons = App.SEASONS.filter(season => item[season]);
+      if (seasons.length === 4) {
+        tags.push('All Seasons');
+      } else {
+        tags.push(...seasons);
+      }
+      return tags;
+    });
+    Handlebars.registerHelper('allSeasonsTag', function(tag) {
+      return tag === 'All Seasons';
+    });
+    Handlebars.registerHelper('flawTags', function(item) {
+      return ['dirty', 'damaged'].filter(prop => item[prop]);
+    });
+    Handlebars.registerHelper('findIconClass', function(tagName) {
+      const lookupTable = {
+        spring: 'fa-duotone fa-flower-tulip',
+        summer: 'fa-duotone fa-sun',
+        fall: 'fa-sharp fa-solid fa-leaf-maple',
+        winter: 'fa-sharp fa-regular fa-snowflake',
+        dirty: 'fa-regular fa-washing-machine',
+        damaged: 'fa-solid fa-shirt-running',
+      };
+      return lookupTable[tagName];
+    });
+    // Handlebars.registerHelper('tags', function(item) {
+    //   let tags = [];
+
+    //   let seasonTags = [];
+    //   const seasons = App.SEASONS.filter(season => item[season]);
+    //   if (seasons.length === 4) {
+    //     seasonTags.push('All Seasons');
+    //   } else {
+    //     seasonTags.push(...seasons);
+    //   }
+
+    //   const dirtyDamagedTags = ['dirty', 'damaged'].filter(prop => item[prop]);
+
+    //   tags = { seasonTags, dirtyDamagedTags };
+    //   // if (item.di)
+    //   return tags;
+    //   // return item.unusualFeatures();
+    // });
   },
 
   handleKeyup(event) {

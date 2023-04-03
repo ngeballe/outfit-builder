@@ -41,7 +41,7 @@ get '/items' do
 end
 
 get '/combinations' do
-  @current_page_stylesheet = 'combinations1.css'
+  @current_page_stylesheet = 'combinations.css'
   @current_page_scripts = ['combinations.js']
   erb :combinations
 end
@@ -52,3 +52,13 @@ get '/outfits' do
   erb :outfits
 end
 
+# get '/foo' do
+#   @current_page_stylesheet = 'foo.css'
+#   @current_page_scripts = ['foo.js']
+#   @fake_people = [
+#     {name: 'Kate', age: 27},
+#     {name: 'Hiram', age: 25},
+#     {name: 'Marie', age: 31},
+#   ]
+#   erb :foo
+# end

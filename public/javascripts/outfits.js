@@ -34,7 +34,7 @@ Object.assign(OutfitsPage, {
       debugger;
     }
 
-    document.querySelector('.outfits-message').textContent = '';
+    this.hideOutfitsMessage();
     this.addRatings(validOutfits);
 
     validOutfits = this.updateWithFullItems(validOutfits);
@@ -42,7 +42,7 @@ Object.assign(OutfitsPage, {
     validOutfits = this.filterBasedOnDirtyAndDamaged(validOutfits, includeDirty, includeDamaged);
 
     if (validOutfits.length === 0) {
-      document.querySelector('.outfits-message').textContent = 'No outfits found. Go set some combinations.';
+      this.showOufitsMessage('No outfits found. Go set some combinations.');
       this.outfitsTable.innerHTML = '';
       return;
     }
@@ -50,6 +50,16 @@ Object.assign(OutfitsPage, {
     validOutfitsSorted = sortBy(validOutfits, 'overallRating', true);
 
     this.outfitsTable.innerHTML = this.templates['outfitsTable']({ outfits: validOutfitsSorted, includeShoes, includeSweaters, showImages });
+  },
+
+  hideOutfitsMessage() {
+    this.outfitsMessage.classList.add('hide');
+    this.outfitsMessage.textContent = '';
+  },
+
+  showOufitsMessage(text) {
+    this.outfitsMessage.textContent = text;
+    this.outfitsMessage.classList.remove('hide');
   },
 
   validShirtPantsOutfits(validCombinations) {
@@ -226,6 +236,7 @@ Object.assign(OutfitsPage, {
 
     this.initTableSettings();
 
+    this.outfitsMessage = document.querySelector('.outfits-message');
     this.outfitsTable = document.querySelector('#outfits');
     this.includeSweatersCheckbox = document.querySelector('#include-sweaters');
     this.showImagesCheckbox = document.querySelector('#show-images');

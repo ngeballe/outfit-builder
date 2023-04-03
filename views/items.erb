@@ -1,47 +1,50 @@
 <main>
-  <nav>
-    <ul class="add-button-nav-links">
-      <li>
-        <a href="#" class="btn" id="add-shirt">Add shirt</a>
-      </li>
-      <li>
-        <a href="#" class="btn" id="add-pants">Add pants</a>
-      </li>
-      <li>
-        <a href="#" class="btn" id="add-sweater">Add sweater</a>
-      </li>
-      <li>
-        <a href="#" class="btn" id="add-shoes">Add shoes</a>
-      </li>
-    </ul>
-  </nav>
-  <section class="items">
-    <div class="shirts item-section" id="shirts">
-    </div>
-    <div class="pants item-section" id="pants">
-    </div>
-    <div class="sweaters item-section" id="sweaters">
-    </div>
-    <div class="shoes item-section" id="shoes">
-    </div>
-  </section>
-
-  <section class="combination-links">
-    <h2>Combinations By Type</h2>
-    <nav>
-      <ul>
-        <li><a href="combinations?type1=shirt&type2=pants" class="combination-link">shirt-pants</a></li>
-        <li><a href="combinations?type1=shirt&type2=sweater" class="combination-link">shirt-sweater</a></li>
-        <li><a href="combinations?type1=shirt&type2=shoes" class="combination-link">shirt-shoes</a></li>
-        <li><a href="combinations?type1=pants&type2=sweater" class="combination-link">pants-sweater</a></li>
-        <li><a href="combinations?type1=pants&type2=shoes" class="combination-link">pants-shoes</a></li>
-        <li><a href="combinations?type1=sweater&type2=shoes" class="combination-link">sweater-shoes</a></li>
+  <div class="wrapper">
+    <nav class="add-button-nav">
+      <ul class="add-button-nav-links">
+        <li>
+          <a href="#" class="btn-add-item" id="add-shirt">Add shirt</a>
+        </li>
+        <li>
+          <a href="#" class="btn-add-item" id="add-pants">Add pants</a>
+        </li>
+        <li>
+          <a href="#" class="btn-add-item" id="add-sweater">Add sweater</a>
+        </li>
+        <li>
+          <a href="#" class="btn-add-item" id="add-shoes">Add shoes</a>
+        </li>
       </ul>
     </nav>
-  </section>
 
-  <div class="modal-background hide">
-    <div class="modal">
+    <section class="items">
+      <div class="shirts item-section" id="shirts">
+      </div>
+      <div class="pants item-section" id="pants">
+      </div>
+      <div class="sweaters item-section" id="sweaters">
+      </div>
+      <div class="shoes item-section" id="shoes">
+      </div>
+    </section>
+
+    <section class="combination-links">
+      <h2>Combinations By Type</h2>
+      <nav>
+        <ul>
+          <li><a href="combinations?type1=shirt&type2=pants" class="combination-link">shirt-pants</a></li>
+          <li><a href="combinations?type1=shirt&type2=sweater" class="combination-link">shirt-sweater</a></li>
+          <li><a href="combinations?type1=shirt&type2=shoes" class="combination-link">shirt-shoes</a></li>
+          <li><a href="combinations?type1=pants&type2=sweater" class="combination-link">pants-sweater</a></li>
+          <li><a href="combinations?type1=pants&type2=shoes" class="combination-link">pants-shoes</a></li>
+          <li><a href="combinations?type1=sweater&type2=shoes" class="combination-link">sweater-shoes</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <div class="modal-background hide">
+      <div class="modal">
+      </div>
     </div>
   </div>
 </main>
@@ -50,16 +53,39 @@
   <h3 class="item-section-heading">{{heading}}</h3>
   <ul class="item-list">
     {{#each items}}
-    <li>
+    <li class="item-li">
       <a href="#" class="item-link" data-id="{{id}}" data-type="{{../type}}">
         <figure class="item-figure">
           <img src="{{imagePath}}" class="item-img-thumb" alt="">
         </figure>
-        <h4 class="item-title">{{title}}</h4>
+        <div class="item-info">
+          <h4 class="item-title">{{title}}</h4>
+          <div class="item-icon-tags">
+            {{#each (seasonTags .)}}
+              {{#unless (allSeasonsTag .)}}
+                {{>tagIcon tagName=.}}
+              {{/unless}}
+            {{/each}}
+
+            {{#each (flawTags .)}}
+              {{>tagIcon tagName=.}}
+            {{/each}}
+          </div>
+        </div>
       </a>
     </li>
     {{/each}}
   </ul>
+</script>
+
+<script id="tagTemplate" type="text/x-handlebars-template" class="partial">
+  <span class="item-tag {{extraClass}}">{{tagName}}</span>
+</script>
+
+<script id="tagIcon" type="text/x-handlebars-template" class="partial">
+  <span class="item-icon-tag" data-name="{{tagName}}" title="{{tagName}}">
+    <i class="{{findIconClass tagName}}"></i>
+  </span>
 </script>
 
 <script id="new-item-template" type="text/x-handlebars-template">
@@ -125,11 +151,38 @@
       <i class="fa-sharp fa-solid fa-xmark"></i>
     </a>
   </header>
-  <div class="modal-body">
-    <figure class="modal-figure">
+  <div class="modal-body modal-show-item-body"  data-item-id="{{id}}" data-item-type="{{type}}">
+    <div class="modal-show-item-arrow-container">
+      <button class="btn-arrow btn-arrow-left" title="Previous item">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+    </div>
+    <figure class="modal-show-item-figure">
       <img src="{{imagePath}}" class="modal-image-item" alt="" data-id="{{id}}" data-zoom="1">
     </figure>
-    <h4 class="item-show-modal-title">{{title}}</h4>
+    <div class="modal-show-item-arrow-container">
+      <button class="btn-arrow btn-arrow-right" title="Next item">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="modal-item-info">
+      <h4 class="item-show-modal-title">{{title}}</h4>
+      <div class="tags">
+        {{#each (seasonTags .)}}
+          {{#if (allSeasonsTag .)}}
+            {{>tagTemplate tagName=. extraClass="item-tag-all-seasons"}}
+          {{else}}
+            {{>tagTemplate tagName=. extraClass="item-tag-one-season"}}
+          {{/if}}
+        {{/each}}
+
+        {{#each (flawTags .)}}
+          {{>tagTemplate tagName=. extraClass="item-tag-flaw"}}
+        {{/each}}
+      </div>
+    </div>
   </div>
 </script>
 

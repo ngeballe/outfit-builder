@@ -15,12 +15,33 @@ td {
   padding: 0.5rem;
 }
 
+th {
+  background: hsl(0, 0%, 80%);
+}
+
+td {
+  background: hsl(0, 0%, 93%);
+}
+
 html {
   font: normal 16px Helvetica, Arial, sans-serif;
 }
 
 body {
-  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  background: #ddd;
+  background-image:
+    repeating-linear-gradient(to bottom,
+      hsla(270, 0%, 90%, 0.5) 0,
+      hsla(270, 0%, 80%, 0.5) 20px,
+      transparent 20px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(to right,
+      hsla(270, 0%, 80%, 0.5) 0,
+      hsla(270, 0%, 90%, 0.5) 20px,
+      transparent 20px,
+      transparent 40px
+    );
   min-height: 100vh;
 }
 
@@ -106,22 +127,17 @@ main {
   padding: var(--header-height) 1rem 1rem 1rem;
 }
 
+.wrapper {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .add-button-nav-links {
   display: flex;
   gap: 1rem;
   padding: 1rem;
-}
-
-.btn {
-  background: lightgreen;
-  border-radius: 5px;
-  display: inline-block;
-  padding: 1rem;
-}
-
-.btn:hover {
-  background: green;
-  color: #fff;
 }
 
 /***
@@ -142,11 +158,16 @@ main {
 }
 
 .modal {
-  background: #ffffef;
+/*  background: hsl(60, 95%, 92%);*/
+/*  background: hsl(60, 20%, 92%);*/
+/*  background: hsl(60, 30%, 92%);*/
+/*  background: #fefefa;*/
+  background: #eeeeea;
   position: absolute;
   min-width: 600px;
   min-height: 400px;
   border-radius: 10px;
+  z-index: 200;
 }
 
 .modal-header {

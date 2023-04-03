@@ -26,7 +26,6 @@ Object.assign(CombinationsPage, {
       return rowData;
     });
 
-    console.log('rendering...');
     this.tableContainer.innerHTML = this.templates['combinations-table-template']({columnItems, rowItems, columnType, rowType, combinationsMatrix });
   },
 
@@ -112,7 +111,7 @@ Object.assign(CombinationsPage, {
 
     this.modal.querySelector('.btn-help').addEventListener('click', event => {
       event.preventDefault();
-      this.showHelp(event);
+      this.toggleHelp(event);
     });
   },
 
@@ -126,6 +125,14 @@ Object.assign(CombinationsPage, {
     } else if (modalOpen) {
       event.preventDefault();
       this.handleKeydownInModalOLD(key);
+    }
+  },
+
+  toggleHelp(event) {
+    if (document.querySelector('.help-text.hide')) {
+      this.showHelp();
+    } else {
+      this.hideHelp();
     }
   },
 
@@ -248,7 +255,8 @@ Object.assign(CombinationsPage, {
   },
 
   handleModalSwipe(event) {
-    const rating = event.target.dataset.rating;
+    const btn = event.target.closest('.btn-swipe');
+    const rating = btn.dataset.rating;
     this.rateAndMove(rating);
   },
 

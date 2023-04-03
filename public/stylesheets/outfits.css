@@ -3,7 +3,7 @@
 ***/
 
 .table-settings {
-  padding: 10px 0 10px 0;
+  padding: 10px 10px 10px 10px;
 }
 
 .settings-dl {
@@ -23,10 +23,13 @@
   padding: 0 40px 0 0;
 }
 
+.settings-dd:last-child {
+  padding: 0 2px 0 0;
+}
+
 .settings-dd p {
   text-align: center;
   display: inline-block;
-  background: lightskyblue;
 }
 
 .settings-input {
@@ -45,37 +48,56 @@ select {
   border-radius: 5px;
 }
 
+
+
 .outfits-message {
-  padding: 1rem 0 0 0;
+  padding: 1rem 1.5rem;
+  background: hsl(0, 100%, 80%);
 }
 
 .outfits {
   border-collapse: separate;
   border-spacing: 0;
-  border-top: 1px solid #333;
-  border-left: 1px solid #333;
+  border-right: 1px solid #555;
+  z-index: 20;
 }
 
-.outfits-tr:nth-child(odd) {
+.outfits-tr td {
+  background: hsl(0, 0%, 92%);
+}
+
+.outfits-tr:nth-child(even) td {
   background: #e0eeee;
 }
 
-.outfits-th:last-child,
-.outfits-td:last-child {
-  border-right: 1px solid #333;
-}
-
 .outfits-th {
-  border-bottom: 1px solid #333;
-  border-right: 1px solid #333;
+  border: 1px solid #555;
+  border-right: none;
   padding: 0.5rem;
 }
 
+.outfits-thead .outfits-th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  vertical-align: bottom;
+}
+
 .outfits-td {
-  border-bottom: 1px solid #333;
-  border-right: 1px solid #333;
+  border: 1px solid #555;
   text-align: center;
   padding: 0.7rem 0.8rem 0.5rem;
+  border-right: none;
+  border-bottom: none;
+  position: relative;
+}
+
+.outfits-tbody tr:first-child td {
+  border-top: none;
+}
+
+.outfits-tbody tr:last-child td {
+  border-bottom: 1px solid #555;
 }
 
 .outfits-td-contents {

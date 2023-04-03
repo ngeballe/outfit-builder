@@ -1,51 +1,51 @@
 <main>
-  <h1>Outfits</h1>
+  <div class="wrapper">
+    <form action="#" method="post" class="table-settings" id="table-settings">
+      <dl class="settings-dl">
+        <dt class="settings-dt">
+          <label for="include-sweaters">Include sweaters</label>
+        </dt>
+        <dd class="settings-dd">
+          <input type="checkbox" name="include-sweaters" id="include-sweaters" class="settings-input">
+        </dd>
+        <dt class="settings-dt">
+          <label for="show-images">Show images</label>
+        </dt>
+        <dd class="settings-dd">
+          <input type="checkbox" name="show-images" id="show-images" class="settings-input" checked>
+        </dd>
+        <dt class="settings-dt">
+          <label for="seasons">Seasons</label>
+        </dt>
+        <dd class="settings-dd">
+          <select name="seasons" id="seasons" class="seasons">
+            <option value="all">All</option>
+            <option value="spring">Spring</option>
+            <option value="summer">Summer</option>
+            <option value="fall">Fall</option>
+            <option value="winter">Winter</option>
+          </select>
+        </dd>
+        <dt class="settings-dt">
+          <label for="seasons">Include dirty</label>
+        </dt>
+        <dd class="settings-dd">
+          <input type="checkbox" name="include-dirty" id="include-dirty" class="settings-input" checked>
+        </dd>
+        <dt class="settings-dt">
+          <label for="seasons">Include damaged</label>
+        </dt>
+        <dd class="settings-dd">
+          <input type="checkbox" name="include-damaged" id="include-damaged" class="settings-input" checked>
+        </dd>
+      </dl>
+    </form>
 
-  <form action="#" method="post" class="table-settings" id="table-settings">
-    <dl class="settings-dl">
-      <dt class="settings-dt">
-        <label for="include-sweaters">Include sweaters</label>
-      </dt>
-      <dd class="settings-dd">
-        <input type="checkbox" name="include-sweaters" id="include-sweaters" class="settings-input">
-      </dd>
-      <dt class="settings-dt">
-        <label for="show-images">Show images</label>
-      </dt>
-      <dd class="settings-dd">
-        <input type="checkbox" name="show-images" id="show-images" class="settings-input" checked>
-      </dd>
-      <dt class="settings-dt">
-        <label for="seasons">Seasons</label>
-      </dt>
-      <dd class="settings-dd">
-        <select name="seasons" id="seasons" class="seasons">
-          <option value="all">All</option>
-          <option value="spring">Spring</option>
-          <option value="summer">Summer</option>
-          <option value="fall">Fall</option>
-          <option value="winter">Winter</option>
-        </select>
-      </dd>
-      <dt class="settings-dt">
-        <label for="seasons">Include dirty</label>
-      </dt>
-      <dd class="settings-dd">
-        <input type="checkbox" name="include-dirty" id="include-dirty" class="settings-input" checked>
-      </dd>
-      <dt class="settings-dt">
-        <label for="seasons">Include damaged</label>
-      </dt>
-      <dd class="settings-dd">
-        <input type="checkbox" name="include-damaged" id="include-damaged" class="settings-input" checked>
-      </dd>
-    </dl>
+    <p class="outfits-message hide"></p>
+
+    <table id="outfits" class="outfits">
+    </table>
   </div>
-
-  <p class="outfits-message"></p>
-
-  <table id="outfits" class="outfits">
-  </table>
 
   <div class="modal-background hide">
     <div class="modal outfits-modal">
@@ -54,37 +54,39 @@
 </main>
 
 <script id="outfitsTable" type="text/x-handlebars-template">
-  <thead>
-    <th class="outfits-th">Shirt</th>
-    <th class="outfits-th">Pants</th>
-    {{#if includeSweaters}}
-      <th class="outfits-th">Sweater</th>
-    {{/if}}
-    {{#if includeShoes}}
-      <th class="outfits-th">Shoes</th>
-    {{/if}}
-    <th class="outfits-th rating-column">Shirt-Pants</th>
-    {{#if includeSweaters}}
-      <th class="outfits-th rating-column">Shirt-Sweater</th>
-    {{/if}}
-    {{#if includeShoes}}
-      <th class="outfits-th rating-column">Shirt-Shoes</th>
-    {{/if}}
-    {{#if includeSweaters}}
-      <th class="outfits-th rating-column">Pants-Sweater</th>
-    {{/if}}
-    {{#if includeShoes}}
-      <th class="outfits-th rating-column">Pants-Shoes</th>
-    {{/if}}
-    {{#if includeShoes}}
-      <th class="outfits-th rating-column">Sweater-Shoes</th>
-    {{/if}}
-    <th class="outfits-th rating-column">Overall Rating</th>
-    <th class="outfits-th">Seasons</th>
-    <th class="outfits-th">Dirty/Damaged Status</th>
-    <th class="outfits-th">View</th>
+  <thead class="outfits-thead">
+    <tr class="outfits-tr">
+      <th class="outfits-th">Shirt</th>
+      <th class="outfits-th">Pants</th>
+      {{#if includeSweaters}}
+        <th class="outfits-th">Sweater</th>
+      {{/if}}
+      {{#if includeShoes}}
+        <th class="outfits-th">Shoes</th>
+      {{/if}}
+      <th class="outfits-th rating-column">Shirt-Pants</th>
+      {{#if includeSweaters}}
+        <th class="outfits-th rating-column">Shirt-Sweater</th>
+      {{/if}}
+      {{#if includeShoes}}
+        <th class="outfits-th rating-column">Shirt-Shoes</th>
+      {{/if}}
+      {{#if includeSweaters}}
+        <th class="outfits-th rating-column">Pants-Sweater</th>
+      {{/if}}
+      {{#if includeShoes}}
+        <th class="outfits-th rating-column">Pants-Shoes</th>
+      {{/if}}
+      {{#if includeShoes}}
+        <th class="outfits-th rating-column">Sweater-Shoes</th>
+      {{/if}}
+      <th class="outfits-th rating-column">Overall Rating</th>
+      <th class="outfits-th">Seasons</th>
+      <th class="outfits-th">Dirty/Damaged Status</th>
+      <th class="outfits-th">View</th>
+    </tr>
   </thead>
-  <tbody>
+  <tbody class="outfits-tbody">
     {{#each outfits}}
       <tr data-shirt-id="{{shirtId}}" data-pants-id="{{pantsId}}" data-sweater-id="{{sweaterId}}" data-shoes-id="{{shoesId}}" class="outfits-tr">
         {{>tableCell item=shirt showImages=../showImages}}
