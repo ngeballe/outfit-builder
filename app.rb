@@ -1,6 +1,9 @@
 require 'sinatra'
-require 'pry'
 require_relative 'database_storage.rb'
+
+configure(:development) do
+  require 'pry'
+end
 
 before do
   # @storage ||= DatabaseStorage.new(logger)
