@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Outfit Builder</title>
     <script src="javascripts/handlebars-4.7.7.js"></script>
+    <% if Sinatra::Base.production? %>
+      <link href="/images/shirt-favicon.png" rel="icon" type="image/x-icon">
+    <% end %>
     <link rel="stylesheet" href="/fontawesome-pro-6.3.0-web/css/all.css">
     <link rel="stylesheet" href="/fontawesome-pro-6.3.0-web/css/sharp-solid.css">
     <link rel="stylesheet" href="/stylesheets/application.css?__" />
