@@ -327,7 +327,6 @@ const App = {
 
   init() {
     this.loadLocalStorageData();
-    // this.addMyData();
     this.updateLocalStorage();
   },
 };
