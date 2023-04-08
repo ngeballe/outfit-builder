@@ -201,7 +201,7 @@ Object.assign(IndexPage, {
   },
 
   renderItems() {
-    this.shirtsEl.innerHTML = this.templates['item-list-template']({ heading: 'Shirts', items: App.shirts(), type: 'shirt' });
+    // this.shirtsEl.innerHTML = this.templates['item-list-template']({ heading: 'Shirts', items: App.shirts(), type: 'shirt' });
     this.pantsEl.innerHTML = this.templates['item-list-template']({ heading: 'Pants', items: App.pants(), type: 'pants' });
     this.sweatersEl.innerHTML = this.templates['item-list-template']({ heading: 'Sweaters', items: App.sweaters(), type: 'sweater' });
     this.shoesEl.innerHTML = this.templates['item-list-template']({ heading: 'Shoes', items: App.shoes(), type: 'shoes' });

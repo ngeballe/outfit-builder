@@ -25,4 +25,8 @@ INSERT INTO items(type, image_path, title) VALUES
   ('sweater', 'images/sweaters/blue plaid overshirt.jpg', 'blue plaid overshirt'),
   ('sweater', 'images/sweaters/red v-neck zipper.jpg', 'red v-neck zipper');
 
-INSERT INTO combinations(item_id1, item_id2)
+INSERT INTO combinations(item_id1, item_id2) VALUES
+  (6, 2),
+  (6, 3),
+  (6, 4),
+  (6, 5);

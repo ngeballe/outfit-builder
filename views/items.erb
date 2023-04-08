@@ -2,23 +2,27 @@
   <div class="wrapper">
     <nav class="add-button-nav">
       <ul class="add-button-nav-links">
-        <li>
-          <a href="#" class="btn-add-item" id="add-shirt">Add shirt</a>
-        </li>
-        <li>
-          <a href="#" class="btn-add-item" id="add-pants">Add pants</a>
-        </li>
-        <li>
-          <a href="#" class="btn-add-item" id="add-sweater">Add sweater</a>
-        </li>
-        <li>
-          <a href="#" class="btn-add-item" id="add-shoes">Add shoes</a>
-        </li>
+        <% @types.each do |type| %>
+          <li>
+            <a href="#" class="btn-add-item" id="add-<%= type %>">Add <%= type %></a>
+          </li>
+        <% end %>
       </ul>
     </nav>
 
+    <!-- {:id=>2,
+ :type=>"pants",
+ :image_path=>"images/pants/brown cords.jpg",
+ :spring=>true,
+ :summer=>true,
+ :fall=>true,
+ :winter=>true,
+ :dirty=>false,
+ :damaged=>false} -->
+
     <section class="items">
       <div class="shirts item-section" id="shirts">
+        <%= erb '_item_section'.to_sym, locals: { items: @shirts, heading: 'Shirts' } %>
       </div>
       <div class="pants item-section" id="pants">
       </div>
