@@ -22,11 +22,20 @@ class DatabaseStorage
   end
 
   def all_items
-    sql = "SELECT * FROM items"
+    sql = "SELECT * FROM items ORDER BY id"
     result = query(sql)
     result.map do |tuple|
       tuple_to_item(tuple)
     end
+  end
+
+  def find_item(id)
+    sql = <<~SQL
+      SELECT * FROM items
+      WHERE id = $1
+    SQL
+    result = query(sql, id)
+    tuple_to_item(result[0])
   end
 
   private

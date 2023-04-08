@@ -317,11 +317,10 @@ const App = {
     return Object.values(this.combinations).flat().length;
   },
 
-  addMyData() {
-    // temp
+  setItems(items) {
     this.items = [];
-    myClothesData.forEach(({itemType, imagePath, title}) => {
-      this.createItem(itemType, imagePath, title, true, true, true, true, false, false);
+    items.forEach(({type, imagePath, title}) => {
+      this.createItem(type, imagePath, title, true, true, true, true, false, false);
     });
   },
 

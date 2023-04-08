@@ -58,6 +58,16 @@ const Page = {
       }, []);
       return reports.join(', ');
     });
+    Handlebars.registerHelper('seasonTags', function(item) {
+      const tags = [];
+      const seasons = App.SEASONS.filter(season => item[season]);
+      if (seasons.length === 4) {
+        tags.push('All Seasons');
+      } else {
+        tags.push(...seasons);
+      }
+      return tags;
+    });
     Handlebars.registerHelper('allSeasonsTag', function(tag) {
       return tag === 'All Seasons';
     });
@@ -159,7 +169,21 @@ const Page = {
     document.addEventListener('keyup', this.handleKeyup.bind(this));
   },
 
+  setItemsFromJSON() {
+    const itemsJSON = document.querySelector('#items-json');
+    const items = JSON.parse(itemsJSON.textContent);
+    items.forEach(item => {
+      item.imagePath = item.image_path;
+      delete item.image_path;
+    });
+    App.setItems(items);
+    console.log(items[0]);
+    console.log(App.items[0]);
+  },
+
   init() {
+    this.setItemsFromJSON();
+
     this.modalBackground = document.querySelector('.modal-background');
     this.modal = document.querySelector('.modal');
 

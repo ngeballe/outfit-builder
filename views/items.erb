@@ -1,3 +1,5 @@
+<div class="hide" id="items-json"><%= JSON.dump(@items) %></div>
+
 <main>
   <div class="wrapper">
     <nav class="add-button-nav">
@@ -10,21 +12,12 @@
       </ul>
     </nav>
 
-    <!-- {:id=>2,
- :type=>"pants",
- :image_path=>"images/pants/brown cords.jpg",
- :spring=>true,
- :summer=>true,
- :fall=>true,
- :winter=>true,
- :dirty=>false,
- :damaged=>false} -->
-
     <section class="items">
       <div class="shirts item-section" id="shirts">
         <%= erb '_item_section'.to_sym, locals: { items: @shirts, heading: 'Shirts' } %>
       </div>
       <div class="pants item-section" id="pants">
+        <%= erb '_item_section'.to_sym, locals: { items: @pants, heading: 'Pants' } %>
       </div>
       <div class="sweaters item-section" id="sweaters">
       </div>

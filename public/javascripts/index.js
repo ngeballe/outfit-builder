@@ -134,12 +134,25 @@ Object.assign(IndexPage, {
   },
 
   showItemModal(type, id) {
-    const item = App.findItem(type, id);
+    const item0 = App.findItem(type, id);
 
-    // const categoryTitle = properCase(category);
-    this.modal.innerHTML = this.templates['show-item-template']( item);
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/items/6');
+    xhr.responseType = 'json';
+    xhr.addEventListener('loadend', (e) => {
+      // console.log(event);
+      // console.log('load?');
+      // console.log(xhr.responseText);
+      const item = xhr.response;
+      console.log(xhr.response);
+      console.log(item0);
+      console.log(item);
 
+    });
+    this.modal.innerHTML = this.templates['show-item-template'](item);
     this.modalBackground.classList.remove('hide');
+
+    const categoryTitle = properCase(category);
   },
 
   handleNewItemFormSubmit(event) {
@@ -202,7 +215,7 @@ Object.assign(IndexPage, {
 
   renderItems() {
     // this.shirtsEl.innerHTML = this.templates['item-list-template']({ heading: 'Shirts', items: App.shirts(), type: 'shirt' });
-    this.pantsEl.innerHTML = this.templates['item-list-template']({ heading: 'Pants', items: App.pants(), type: 'pants' });
+    // this.pantsEl.innerHTML = this.templates['item-list-template']({ heading: 'Pants', items: App.pants(), type: 'pants' });
     this.sweatersEl.innerHTML = this.templates['item-list-template']({ heading: 'Sweaters', items: App.sweaters(), type: 'sweater' });
     this.shoesEl.innerHTML = this.templates['item-list-template']({ heading: 'Shoes', items: App.shoes(), type: 'shoes' });
   },

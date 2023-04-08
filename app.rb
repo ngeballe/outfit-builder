@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'json'
 require_relative 'database_storage.rb'
 
 configure(:development) do
@@ -6,10 +7,13 @@ configure(:development) do
 end
 
 before do
+  @storage ||= DatabaseStorage.new(logger)
+
   @types = ['shirt', 'pants', 'sweater', 'shoes']
   @seasons  = ['spring', 'summer', 'fall', 'winter']
 
-  @storage ||= DatabaseStorage.new(logger)
+  @items = @storage.all_items
+
   @header_nav_links = [
     {
       href: '/items',
@@ -76,13 +80,22 @@ get '/' do
 end
 
 get '/items' do
-  @items = @storage.all_items
   @shirts = items_by_type(@items, 'shirt')
+  @pants = items_by_type(@items, 'pants')
   # binding.pry
   @current_page_stylesheet = 'index.css'
   @current_page_scripts = ['index.js']
   erb :items
 end
+
+# get '/items/:id' do
+#   @item = @storage.find_item(params[:id].to_i)
+#   if !@item
+#     status 404
+#     'Item not found'
+#   end
+#   JSON.dump(@item)
+# end
 
 get '/combinations' do
   @current_page_stylesheet = 'combinations.css'
