@@ -93,6 +93,24 @@ get '/items/:id' do
   JSON.dump(@item)
 end
 
+post '/items' do
+  # {"type"=>"shirt", "image-path"=>"https://images.unsplash.com/photo-1611911813383-67769b37a149?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2960&q=80", "title"=>"d", "spring"=>"on", "summer"=>"on", "fall"=>"on", "winter"=>"on"}
+  type = params[:type]
+  image_path = params['image-path']
+  title = params['title']
+  spring = params[:spring] == 'on'
+  summer = params[:summer] == 'on'
+  fall = params[:fall] == 'on'
+  winter = params[:winter] == 'on'
+  dirty = params[:dirty] == 'on'
+  damaged = params[:damaged] == 'on'
+
+  @storage.create_item(type, image_path, title, spring, summer, fall, winter, dirty, damaged)
+
+  # 'success'
+  redirect '/items'
+end
+
 post '/items/:id' do
   id = params[:id].to_i
   @item = @storage.find_item(id)
@@ -108,11 +126,20 @@ post '/items/:id' do
   summer = params['summer'] == 'on'
   fall = params['fall'] == 'on'
   winter = params['winter'] == 'on'
-  @storage.update_item(id, image_path, title, spring, summer, fall, winter)
+  dirty = params['dirty'] == 'on'
+  damaged = params['damaged'] == 'on'
+
+  @storage.update_item(id, image_path, title, spring, summer, fall, winter, dirty, damaged)
 
   @updated_item = @storage.find_item(id)
 
   JSON.dump(@updated_item)
+end
+
+post '/items/:id/delete' do
+  id = params[:id].to_i
+  @storage.delete_item(id)
+  redirect '/items'
 end
 
 get '/combinations' do

@@ -7,7 +7,8 @@ class DatabaseStorage
     elsif Sinatra::Base.test?
       # PG.connect(dbname: 'matchmaker_test')
     else
-      PG.connect(dbname: 'outfits-dev', port: 5433)
+      # PG.connect(dbname: 'outfits-dev', port: 5433)
+      PG.connect(dbname: 'outfits-dev')
     end
     @logger = logger if logger
   end
@@ -50,14 +51,28 @@ class DatabaseStorage
     tuple_to_item(result[0])
   end
 
-  def update_item(id, image_path, title, spring, summer, fall, winter)
+  def create_item(type, image_path, title, spring, summer, fall, winter, dirty, damaged)
+    sql = <<~SQL
+      INSERT INTO items(type, image_path, title, spring, summer, fall, winter, dirty, damaged)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    SQL
+    query(sql, type, image_path, title, spring, summer, fall, winter, dirty, damaged)
+  end
+
+  def update_item(id, image_path, title, spring, summer, fall, winter, dirty, damaged)
     sql = <<~SQL
       UPDATE items
       SET image_path = $2, title = $3, spring = $4,
-        summer = $5, fall = $6, winter = $7
+        summer = $5, fall = $6, winter = $7, dirty = $8,
+        damaged = $9
       WHERE id = $1;
     SQL
-    query(sql, id, image_path, title, spring, summer, fall, winter)
+    query(sql, id, image_path, title, spring, summer, fall, winter, dirty, damaged)
+  end
+
+  def delete_item(id)
+    sql = "DELETE FROM items WHERE id = $1"
+    query(sql, id)
   end
 
   private

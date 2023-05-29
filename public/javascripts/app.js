@@ -278,31 +278,44 @@ const App = {
     this.updateLocalStorage();
   },
 
-  updateItem(id, type, imagePath, title, spring, summer, fall, winter, dirty, damaged) {
-    const item = this.items.find(item => item.id === id && item.type === type);
+  // updateItem(id, type, imagePath, title, spring, summer, fall, winter, dirty, damaged) {
+  //   // fetch(items, '/')
 
-    item.imagePath = imagePath;
-    item.title = title;
-    item.spring = spring;
-    item.summer = summer;
-    item.fall = fall;
-    item.winter = winter;
-    item.dirty = dirty;
-    item.damaged = damaged;
+  //   const item = this.items.find(item => item.id === id && item.type === type);
 
-    this.updateLocalStorage();
-  },
+  //   item.imagePath = imagePath;
+  //   item.title = title;
+  //   item.spring = spring;
+  //   item.summer = summer;
+  //   item.fall = fall;
+  //   item.winter = winter;
+  //   item.dirty = dirty;
+  //   item.damaged = damaged;
 
-  deleteItem(type, id) {
-    if (!id) {
-      throw "Cannot delete item without id";
-    }
-    this.items = this.items.filter(item => {
-      return !(item.type === type && item.id === id);
+  //   this.updateLocalStorage();
+  // },
+
+  deleteItem(id) {
+    return new Promise((resolve) => {
+      if (!id) {
+        throw "Cannot delete item without id";
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `/items/${id}/delete`);
+      xhr.addEventListener('load', event => {
+        // debugger;
+        // this.querySelector
+        resolve(xhr.responseText);
+      });
+      // fetch();
+      xhr.send();
     });
+
+    // this.items = this.items.filter(item => {
+    //   return !(item.type === type && item.id === id);
+    // });
     // delete combinations with item
-    this.deleteCombinationsWithItem(type, id);
-    this.updateLocalStorage();
   },
 
   deleteCombinationsWithItem(type, id) {

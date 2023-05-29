@@ -36,15 +36,17 @@ Object.assign(IndexPage, {
     const target = event.target;
     const deleteButton = event.target.closest('.btn-delete');
     if (deleteButton) {
-      const itemId = +deleteButton.dataset.id;
-      const itemType = deleteButton.dataset.itemType;
-      this.handleDeleteButton(itemType, itemId);
+      // const itemId = +deleteButton.dataset.id;
+      this.handleDeleteButton(event);
+      return;
     }
+
     const editButton = event.target.closest('.btn-edit');
     if (editButton) {
       event.preventDefault();
       const itemId = +editButton.dataset.id;
       this.showEditItemModal(itemId);
+      return;
     }
 
     const currentArrowButton = event.target.closest('.btn-arrow');
@@ -112,12 +114,16 @@ Object.assign(IndexPage, {
     this.modalBackground.classList.add('hide');
   },
 
-  handleDeleteButton(itemType, itemId) {
+  async handleDeleteButton(event) {
     const ok = confirm("Are you sure you want to delete the item? Cannot undo.");
     if (ok) {
-      App.deleteItem(itemType, itemId);
-      this.renderItems();
-      this.hideModal();
+      const form = event.target.closest('.btn-delete').querySelector('form');
+      // xhr.open('POST', `/items/${id}/delete`);
+      form.submit();
+      // const deleteConfirmationMsg = await App.deleteItem(itemId);
+      // this.renderItems();
+      // console.log(deleteConfirmationMsg);
+      // this.hideModal();
     }
   },
 
@@ -142,7 +148,6 @@ Object.assign(IndexPage, {
     //   this.modalBackground.classList.remove('hide');
     // });
     // xhr.send();
-    console.log('hi there');
 
     const item = await App.fetchItem(id);
     this.modal.innerHTML = this.templates['show-item-template'](item);
@@ -160,18 +165,7 @@ Object.assign(IndexPage, {
       throw 'error';
     }
 
-    const title = form.title.value;
-    const spring = form.spring.checked;
-    const summer = form.summer.checked;
-    const fall = form.fall.checked;
-    const winter = form.winter.checked;
-    const dirty = form.dirty.checked;
-    const damaged = form.damaged.checked;
-
-    App.createItem(itemType, imagePath, title, spring, summer, fall, winter, dirty, damaged);
-
-    this.hideModal();
-    this.renderItems();
+    form.submit();
   },
 
   handleEditItemFormSubmit(event) {
@@ -196,7 +190,7 @@ Object.assign(IndexPage, {
       this.hideModal(); // or back to show??
       const currentItemLink = document.querySelector(`.item-link[data-id="${itemId}"]`);
       currentItemLink.outerHTML = this.templates['itemTemplate'](item);
-    });
+      });
 
     xhr.send(data);
   },

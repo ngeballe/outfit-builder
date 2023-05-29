@@ -96,7 +96,7 @@
     </a>
   </header>
   <div class="modal-body">
-    <form action="#" method="post" id="new-item">
+    <form action="/items" method="post" id="new-item">
       <input type="hidden" name="type" id="type" value="{{itemType}}">
       <dl>
         <dt>
@@ -134,8 +134,10 @@
 <script id="show-item-template" type="text/x-handlebars-template">
   <header class="modal-header">
     <div class="modal-header-btn-group-left">
-      <button class="btn-delete" title="Delete item" data-id="{{id}}">
-        <i class="fa-solid fa-trash-can"></i>
+      <button class="btn-delete" title="Delete item">
+        <form action="/items/{{id}}/delete" method="post">
+          <i class="fa-solid fa-trash-can"></i>
+        </form>
       </button>
       <button class="btn-edit" title="Edit item" data-id="{{id}}">
         <i class="fa-solid fa-pencil"></i>
