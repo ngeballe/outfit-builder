@@ -5,8 +5,7 @@ Object.assign(IndexPage, {
     if (link) {
       event.preventDefault();
       const id = +link.dataset.id;
-      const type = link.dataset.type;
-      this.showItemModal(type, id);
+      this.showItemModal(id);
     }
   },
 
@@ -45,8 +44,7 @@ Object.assign(IndexPage, {
     if (editButton) {
       event.preventDefault();
       const itemId = +editButton.dataset.id;
-      const itemType = editButton.dataset.itemType;
-      this.showEditItemModal(itemType, itemId);
+      this.showEditItemModal(itemId);
     }
 
     const currentArrowButton = event.target.closest('.btn-arrow');
@@ -78,12 +76,11 @@ Object.assign(IndexPage, {
   handleArrowButton(currentArrowButton) {
     const modalBody = currentArrowButton.closest('.modal-body');
     const currentId = modalBody.dataset.itemId;
-    const currentType = modalBody.dataset.itemType;
 
     const itemLinksOnPage = Array.from(document.querySelectorAll('.item-link'));
     const maxItemIndex = itemLinksOnPage.length - 1;
     const currentIndex = itemLinksOnPage.findIndex(link => {
-      return link.dataset.id === currentId && link.dataset.type === currentType;
+      return link.dataset.id === currentId;
     });
 
     if (currentIndex === undefined) {
@@ -94,14 +91,14 @@ Object.assign(IndexPage, {
     if (currentArrowButton.classList.contains('btn-arrow-right')) {
       const nextItemIndex = cycleValueUp(currentIndex, maxItemIndex);
       const nextItemLink = itemLinksOnPage[nextItemIndex];
-      const { type, id } = nextItemLink.dataset;
-      this.showItemModal(type, +id);
+      const id = nextItemLink.dataset.id;
+      this.showItemModal(+id);
     } else if (currentArrowButton.classList.contains('btn-arrow-left')) {
       const prevItemIndex = cycleValueDown(currentIndex, maxItemIndex);
       const prevItemLink = itemLinksOnPage[prevItemIndex];
-      const { type, id } = prevItemLink.dataset;
+      const id = prevItemLink.dataset.id;
       const prevItem = itemLinksOnPage[prevItemIndex];
-      this.showItemModal(type, +id);
+      this.showItemModal(+id);
     }
   },
 
@@ -124,8 +121,10 @@ Object.assign(IndexPage, {
     }
   },
 
-  showEditItemModal(type, id) {
-    const item = App.findItem(type, id);
+  async showEditItemModal(id) {
+    const item = await App.fetchItem(id);
+    console.log(item);
+    console.log(App.SEASONS);
     this.modal.innerHTML = this.templates['edit-item-template']({item: item, seasons: App.SEASONS });
 
     this.modal.querySelector('form#edit-item').addEventListener('submit', this.handleEditItemFormSubmit.bind(this));
@@ -133,26 +132,21 @@ Object.assign(IndexPage, {
     this.modalBackground.classList.remove('hide');
   },
 
-  showItemModal(type, id) {
-    const item0 = App.findItem(type, id);
+  async showItemModal(id) {
+    // const xhr = new XMLHttpRequest();
+    // xhr.open('GET', `/items/${id}`);
+    // xhr.responseType = 'json';
+    // xhr.addEventListener('load', event => {
+    //   const item = xhr.response;
+    //   this.modal.innerHTML = this.templates['show-item-template'](item);
+    //   this.modalBackground.classList.remove('hide');
+    // });
+    // xhr.send();
+    console.log('hi there');
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/items/6');
-    xhr.responseType = 'json';
-    xhr.addEventListener('loadend', (e) => {
-      // console.log(event);
-      // console.log('load?');
-      // console.log(xhr.responseText);
-      const item = xhr.response;
-      console.log(xhr.response);
-      console.log(item0);
-      console.log(item);
-
-    });
+    const item = await App.fetchItem(id);
     this.modal.innerHTML = this.templates['show-item-template'](item);
     this.modalBackground.classList.remove('hide');
-
-    const categoryTitle = properCase(category);
   },
 
   handleNewItemFormSubmit(event) {
@@ -184,40 +178,34 @@ Object.assign(IndexPage, {
     event.preventDefault();
 
     const form = event.target;
-    const itemType = form.type.value;
     const itemId = +form.id.value;
     const imagePath = form['image-path'].value;
 
     if (imagePath === '') {
       alert('Your item must have an image (link or file path)');
+      form.reset();
     }
 
-    const title = form.title.value;
-    const spring = form.spring.checked;
-    const summer = form.summer.checked;
-    const fall = form.fall.checked;
-    const winter = form.winter.checked;
-    const dirty = form.dirty.checked;
-    const damaged = form.damaged.checked;
+    const data = new FormData(form);
+    const xhr = new XMLHttpRequest();
 
-    const item = App.findItem(itemType, itemId);
+    xhr.open(form.method, form.action);
+    xhr.responseType = 'json';
+    xhr.addEventListener('load', event => {
+      const item = xhr.response;
+      this.hideModal(); // or back to show??
+      const currentItemLink = document.querySelector(`.item-link[data-id="${itemId}"]`);
+      currentItemLink.outerHTML = this.templates['itemTemplate'](item);
+    });
 
-    if (!item) {
-      alert('Error! Item not found');
-      throw 'error';
-    }
-
-    App.updateItem(itemId, itemType, imagePath, title, spring, summer, fall, winter, dirty, damaged);
-
-    this.hideModal(); // or back to show??
-    this.renderItems();
+    xhr.send(data);
   },
 
   renderItems() {
     // this.shirtsEl.innerHTML = this.templates['item-list-template']({ heading: 'Shirts', items: App.shirts(), type: 'shirt' });
     // this.pantsEl.innerHTML = this.templates['item-list-template']({ heading: 'Pants', items: App.pants(), type: 'pants' });
-    this.sweatersEl.innerHTML = this.templates['item-list-template']({ heading: 'Sweaters', items: App.sweaters(), type: 'sweater' });
-    this.shoesEl.innerHTML = this.templates['item-list-template']({ heading: 'Shoes', items: App.shoes(), type: 'shoes' });
+    // this.sweatersEl.innerHTML = this.templates['item-list-template']({ heading: 'Sweaters', items: App.sweaters(), type: 'sweater' });
+    // this.shoesEl.innerHTML = this.templates['item-list-template']({ heading: 'Shoes', items: App.shoes(), type: 'shoes' });
   },
 
   showNewItemModal(category) {
@@ -235,12 +223,11 @@ Object.assign(IndexPage, {
     form['image-path'].focus();
   },
 
-  run() {
-    this.renderItems();
-
-    App.items = App.items.filter(item => item.id !== null);
-    App.updateLocalStorage();
-  },
+  // run() {
+  //   this.renderItems();
+  //   // App.items = App.items.filter(item => item.id !== null);
+  //   App.updateLocalStorage();
+  // },
 
   init() {
     Page.init();
@@ -264,5 +251,5 @@ Object.assign(IndexPage, {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  IndexPage.init().run();
+  IndexPage.init();
 });

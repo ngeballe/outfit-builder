@@ -24,6 +24,9 @@ const Page = {
         return '';
       }
     });
+    Handlebars.registerHelper('stringDisplay', function(item) {
+      return '{' + Object.keys(item).map(prop => `${prop} => ${item[prop]}`).join(', ') + '}';
+    });
     Handlebars.registerHelper('titleCase', function(str) {
       return str[0].toUpperCase() + str.slice(1);
     });
@@ -177,12 +180,11 @@ const Page = {
       delete item.image_path;
     });
     App.setItems(items);
-    console.log(items[0]);
-    console.log(App.items[0]);
+    App.updateLocalStorage();
   },
 
   init() {
-    this.setItemsFromJSON();
+    // this.setItemsFromJSON();
 
     this.modalBackground = document.querySelector('.modal-background');
     this.modal = document.querySelector('.modal');

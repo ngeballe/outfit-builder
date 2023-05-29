@@ -10,16 +10,16 @@
     <% end %>
     <link rel="stylesheet" href="/fontawesome-pro-6.3.0-web/css/all.css">
     <link rel="stylesheet" href="/fontawesome-pro-6.3.0-web/css/sharp-solid.css">
-    <link rel="stylesheet" href="/stylesheets/application.css?__" />
+    <link rel="stylesheet" href="/stylesheets/application.css" />
     <% if @current_page_stylesheet %>
-      <link rel="stylesheet" href="/stylesheets/<%= @current_page_stylesheet %>?__" />
+      <link rel="stylesheet" href="/stylesheets/<%= @current_page_stylesheet %>" />
     <% end %>
-    <script src="/data/seeds.js"></script>
-    <script src="/javascripts/item.js?1.0"></script>
-    <script src="/javascripts/app.js?2.0"></script>
-    <script src="/javascripts/page.js?3.0"></script>
+    <script src="/javascripts/item.js"></script>
+    <script src="/javascripts/app.js"></script>
+    <script src="/javascripts/page.js"></script>
+
     <% @current_page_scripts.each do |script| %>
-      <script src="/javascripts/<%= script %>?__."></script>
+      <script src="/javascripts/<%= script %>"></script>
     <% end %>
   </head>
   <body>

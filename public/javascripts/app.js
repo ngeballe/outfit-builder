@@ -78,6 +78,8 @@ const App = {
     this.items = [];
 
     const data = JSON.parse(localStorage.getItem('outfits'));
+    console.log(data);
+    debugger;
     if (!data) {
       return;
     }
@@ -208,9 +210,16 @@ const App = {
     return this.items.indexOf(item);
   },
 
-  findItem(type, id) {
-    const items = this.itemsByType(type);
-    return items.find(item => item.id === id);
+  fetchItem(id) {
+    return new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', `/items/${id}`);
+      xhr.responseType = 'json';
+      xhr.addEventListener('load', event => {
+        resolve(xhr.response);
+      });
+      xhr.send();
+    });
   },
 
   itemsByType(itemType) {
@@ -270,7 +279,6 @@ const App = {
   },
 
   updateItem(id, type, imagePath, title, spring, summer, fall, winter, dirty, damaged) {
-    // console.log(item);
     const item = this.items.find(item => item.id === id && item.type === type);
 
     item.imagePath = imagePath;
@@ -325,8 +333,8 @@ const App = {
   },
 
   init() {
-    this.loadLocalStorageData();
-    this.updateLocalStorage();
+    // this.loadLocalStorageData();
+    // this.updateLocalStorage();
   },
 };
 

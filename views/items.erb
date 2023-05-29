@@ -20,8 +20,7 @@
         <%= erb '_item_section'.to_sym, locals: { items: @pants, heading: 'Pants' } %>
       </div>
       <div class="sweaters item-section" id="sweaters">
-      </div>
-      <div class="shoes item-section" id="shoes">
+        <%= erb '_item_section'.to_sym, locals: { items: @sweaters, heading: 'Sweaters' } %>
       </div>
     </section>
 
@@ -50,29 +49,33 @@
   <h3 class="item-section-heading">{{heading}}</h3>
   <ul class="item-list">
     {{#each items}}
-    <li class="item-li">
-      <a href="#" class="item-link" data-id="{{id}}" data-type="{{../type}}">
-        <figure class="item-figure">
-          <img src="{{imagePath}}" class="item-img-thumb" alt="">
-        </figure>
-        <div class="item-info">
-          <h4 class="item-title">{{title}}</h4>
-          <div class="item-icon-tags">
-            {{#each (seasonTags .)}}
-              {{#unless (allSeasonsTag .)}}
-                {{>tagIcon tagName=.}}
-              {{/unless}}
-            {{/each}}
-
-            {{#each (flawTags .)}}
-              {{>tagIcon tagName=.}}
-            {{/each}}
-          </div>
-        </div>
-      </a>
-    </li>
+      <li class="item-li">
+        {{>itemLink .}}
+      </li>
     {{/each}}
   </ul>
+</script>
+
+<script id="itemTemplate" type="text/x-handlebars-template">
+  <a href="#" class="item-link" data-id="{{id}}">
+    <figure class="item-figure">
+      <img src="{{image_path}}" class="item-img-thumb" alt="">
+    </figure>
+    <div class="item-info">
+      <h4 class="item-title">{{title}}</h4>
+      <div class="item-icon-tags">
+        {{#each (seasonTags .)}}
+          {{#unless (allSeasonsTag .)}}
+            {{>tagIcon tagName=.}}
+          {{/unless}}
+        {{/each}}
+
+        {{#each (flawTags .)}}
+          {{>tagIcon tagName=.}}
+        {{/each}}
+      </div>
+    </div>
+  </a>
 </script>
 
 <script id="tagTemplate" type="text/x-handlebars-template" class="partial">
@@ -131,10 +134,10 @@
 <script id="show-item-template" type="text/x-handlebars-template">
   <header class="modal-header">
     <div class="modal-header-btn-group-left">
-      <button class="btn-delete" title="Delete item" data-id="{{id}}" data-item-type="{{type}}">
+      <button class="btn-delete" title="Delete item" data-id="{{id}}">
         <i class="fa-solid fa-trash-can"></i>
       </button>
-      <button class="btn-edit" title="Edit item" data-id="{{id}}" data-item-type="{{type}}">
+      <button class="btn-edit" title="Edit item" data-id="{{id}}">
         <i class="fa-solid fa-pencil"></i>
       </button>
     </div>
@@ -155,7 +158,7 @@
       </button>
     </div>
     <figure class="modal-show-item-figure">
-      <img src="{{imagePath}}" class="modal-image-item" alt="" data-id="{{id}}" data-zoom="1">
+      <img src="{{image_path}}" class="modal-image-item" alt="" data-id="{{id}}" data-zoom="1">
     </figure>
     <div class="modal-show-item-arrow-container">
       <button class="btn-arrow btn-arrow-right" title="Next item">
@@ -192,18 +195,16 @@
   </header>
   <div class="modal-body">
     <figure class="modal-edit-figure">
-      <img src="{{item.imagePath}}" alt="" class="thumbnail-larger">
+      <img src="{{item.image_path}}" alt="" class="thumbnail-larger">
     </figure>
-    <h1>imagine!</h1>
-    <form action="#" method="post" id="edit-item">
+    <form action="/items/{{item.id}}" method="post" id="edit-item">
       <input type="hidden" id="id" name="id" value="{{item.id}}">
-      <input type="hidden" id="type" name="name" value="{{item.type}}">
       <dl>
         <dt>
           <label for="image-path">Image Path</label>
         </dt>
         <dd>
-          <input type="text" id="image-path" name="image-path" value="{{item.imagePath}}">
+          <input type="text" id="image-path" name="image-path" value="{{item.image_path}}">
         </dd>
         <dt>
           <label for="image-path">Title (Optional)</label>
@@ -230,7 +231,7 @@
           <label for="damaged">Damaged (ripped, stained, etc.)</label>
         </dd>
       </dl>
-      <button type="submit" id="new-item-submit">Save</button>
+      <button type="submit" id="edit-item-submit">Save</button>
     </form>
   </div>
 </script>

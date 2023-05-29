@@ -29,6 +29,18 @@ class DatabaseStorage
     end
   end
 
+  def items_by_type(type)
+    sql = <<~SQL
+      SELECT * FROM items
+      WHERE type = $1
+      ORDER BY id
+    SQL
+    result = query(sql, type)
+    result.map do |tuple|
+      tuple_to_item(tuple)
+    end
+  end
+
   def find_item(id)
     sql = <<~SQL
       SELECT * FROM items
@@ -36,6 +48,16 @@ class DatabaseStorage
     SQL
     result = query(sql, id)
     tuple_to_item(result[0])
+  end
+
+  def update_item(id, image_path, title, spring, summer, fall, winter)
+    sql = <<~SQL
+      UPDATE items
+      SET image_path = $2, title = $3, spring = $4,
+        summer = $5, fall = $6, winter = $7
+      WHERE id = $1;
+    SQL
+    query(sql, id, image_path, title, spring, summer, fall, winter)
   end
 
   private

@@ -23,7 +23,7 @@ GEM
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.9)
-    pg (1.4.6)
+    pg (1.5.3)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -44,7 +44,7 @@ PLATFORMS
 
 DEPENDENCIES
   erubis
-  pg (~> 1.4, >= 1.4.6)
+  pg (~> 1.5, >= 1.5.3)
   pry (~> 0.14.2)
   puma
   rerun (~> 0.14.0)

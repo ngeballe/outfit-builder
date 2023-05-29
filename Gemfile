@@ -12,7 +12,8 @@ group :development, :test do
   gem 'pry', '~> 0.14.2'
 end
 
-gem 'pg', '~> 1.4', '>= 1.4.6'
+# gem 'pg', '~> 1.4', '>= 1.4.6'
+gem 'pg', '~> 1.5', '>= 1.5.3'
 
 
 

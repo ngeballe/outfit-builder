@@ -56,10 +56,6 @@ helpers do
   end
 end
 
-def items_by_type(items, type)
-  items.select { |item| item[:type] == type }
-end
-
 def season_tags(item)
   tags = []
   seasons = @seasons.select { |season| item[season.to_sym] }
@@ -80,22 +76,44 @@ get '/' do
 end
 
 get '/items' do
-  @shirts = items_by_type(@items, 'shirt')
-  @pants = items_by_type(@items, 'pants')
-  # binding.pry
+  @shirts = @storage.items_by_type('shirt')
+  @pants = @storage.items_by_type('pants')
+  @sweaters = @storage.items_by_type('sweater')
   @current_page_stylesheet = 'index.css'
   @current_page_scripts = ['index.js']
   erb :items
 end
 
-# get '/items/:id' do
-#   @item = @storage.find_item(params[:id].to_i)
-#   if !@item
-#     status 404
-#     'Item not found'
-#   end
-#   JSON.dump(@item)
-# end
+get '/items/:id' do
+  @item = @storage.find_item(params[:id].to_i)
+  if !@item
+    status 404
+    'Item not found'
+  end
+  JSON.dump(@item)
+end
+
+post '/items/:id' do
+  id = params[:id].to_i
+  @item = @storage.find_item(id)
+
+  if !@item
+    status 404
+    'Item not found'
+  end
+
+  image_path = params['image-path']
+  title = params['title']
+  spring = params['spring'] == 'on'
+  summer = params['summer'] == 'on'
+  fall = params['fall'] == 'on'
+  winter = params['winter'] == 'on'
+  @storage.update_item(id, image_path, title, spring, summer, fall, winter)
+
+  @updated_item = @storage.find_item(id)
+
+  JSON.dump(@updated_item)
+end
 
 get '/combinations' do
   @current_page_stylesheet = 'combinations.css'
