@@ -1,0 +1,8 @@
+<td class="outfits-td">
+  <div class="outfits-td-contents">
+    <% if @show_images %>
+      <img src="<%= item[:image_path] %>" alt="" class="thumbnail-smaller">
+    <% end %>
+    <span class="item-title"><%= item[:title] %></span>
+  </div>
+</td>

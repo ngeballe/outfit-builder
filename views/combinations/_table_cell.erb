@@ -1,0 +1,9 @@
+<% rating = combination[:rating] %>
+
+<td data-column-id="<%= combination[:column_id] %>" data-row-id="<%= combination[:row_id] %>" data-rating="<%= rating %>" data-column-index="<%= column_index %>" class="combinations-td">
+  <div class="cell-data-wrapper">
+    <a href="#" class="view-combination">View</a>
+    <label for="">Rating:</label>
+    <%= erb 'combinations/_rating_select_menu'.to_sym, locals: { rating: rating } %>
+  </div>
+</td>

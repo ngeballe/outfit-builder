@@ -15,5 +15,5 @@ CREATE TABLE combinations(
   id serial PRIMARY KEY,
   item_id1 integer REFERENCES items(id) ON DELETE CASCADE,
   item_id2 integer REFERENCES items(id) ON DELETE CASCADE,
-  rating integer
+  rating integer NOT NULL
 );

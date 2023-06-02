@@ -1,0 +1,19 @@
+<tbody class="outfits-tbody">
+  <% @outfits.each do |outfit| %>
+    <tr>
+      <%= erb 'outfits/_table_cell'.to_sym, locals: { item: outfit[:shirt] } %>
+      <%= erb 'outfits/_table_cell'.to_sym, locals: { item: outfit[:pants] } %>
+      <td class="outfits-td"><%= outfit[:shirt_pants_rating] %></td>
+      <td class="outfits-td"><%= outfit[:overall_rating] %></td>
+      <td class="outfits-td">
+        <%= outfit[:seasons].join(', ') %>
+      </td>
+      <td class="outfits-td">
+        <%= dirty_damaged_status(outfit[:shirt], outfit[:pants], outfit[:sweater]) %>
+      </td>
+      <td class="outfits-td">
+        <a href="#" class="view-outfit">View outfit</a>
+      </td>
+    </tr>
+  <% end %>
+</tbody>

@@ -1,30 +1,31 @@
 const CombinationsPage = Object.create(Page);
 Object.assign(CombinationsPage, {
   renderCombinations() {
-    const columnType = this.type1;
-    const rowType = this.type2;
+    // delete?
+    // const columnType = this.type1;
+    // const rowType = this.type2;
 
-    const columnItems = App.itemsByType(columnType);
-    const rowItems = App.itemsByType(rowType);
-    const combinations = App.combinations[`${columnType}-${rowType}`];
+    // const columnItems = App.itemsByType(columnType);
+    // const rowItems = App.itemsByType(rowType);
+    // const combinations = App.combinations[`${columnType}-${rowType}`];
 
-    const combinationsMatrix = rowItems.map(rowItem => {
-      const rowItemId = rowItem.id;
+    // const combinationsMatrix = rowItems.map(rowItem => {
+    //   const rowItemId = rowItem.id;
 
-      const combinationsForRow = columnItems.map(columnItem => {
-        const combo = App.findCombination(columnType, rowType, columnItem.id, rowItemId);
-        if (!combo) {
-          debugger;
-        }
-        let { id1: columnId, id2: rowId, rating } = combo;
-        return { columnId, rowId, rating };
-      });
-      const rowData = {
-        rowItem,
-        combinationsForRow,
-      };
-      return rowData;
-    });
+    //   const combinationsForRow = columnItems.map(columnItem => {
+    //     const combo = App.findCombination(columnType, rowType, columnItem.id, rowItemId);
+    //     if (!combo) {
+    //       debugger;
+    //     }
+    //     let { id1: columnId, id2: rowId, rating } = combo;
+    //     return { columnId, rowId, rating };
+    //   });
+    //   const rowData = {
+    //     rowItem,
+    //     combinationsForRow,
+    //   };
+    //   return rowData;
+    // });
 
     this.tableContainer.innerHTML = this.templates['combinations-table-template']({columnItems, rowItems, columnType, rowType, combinationsMatrix });
   },
@@ -40,7 +41,7 @@ Object.assign(CombinationsPage, {
         const rowId = +cell.dataset.rowId;
         const columnType = table.dataset.columnType;
         const rowType = table.dataset.rowType;
-        App.updateCombination(columnType, rowType, columnId, rowId, rating);
+        App.updateCombination(columnId, rowId, rating);
         cell.dataset.rating = rating;
       });
     });
@@ -67,11 +68,13 @@ Object.assign(CombinationsPage, {
     this.typesSelectEl.addEventListener('change', this.updateTable.bind(this));
 
     document.querySelector('#btn-reset').addEventListener('click', event => {
+      event.preventDefault();
       const ok = confirm('Are you sure you want to delete all combinations? Cannot undo.');
       if (ok) {
-        // console.log('DELETE');
-        App.resetCombinations();
-        this.renderCombinations();
+        debugger;
+        event.target.closest('form').submit();
+        // App.deleteAllCombinations();
+        // this.renderCombinations();
       }
     });
   },
@@ -79,27 +82,24 @@ Object.assign(CombinationsPage, {
   updateTable(event) {
     const value = event.target.value;
     const [ type1, type2 ] = value.split('-');
-    this.updateParams(type1, type2);
-
-    // load page with new types
-    this.renderCombinations();
+    this.updateLocationParams(type1, type2);
   },
 
-  updateParams(type1, type2) {
+  updateLocationParams(type1, type2) {
     window.location.search = `?type1=${type1}&type2=${type2}`;
   },
 
-  showCombinationModal(columnId, rowId, columnType, rowType, td) {
-    const columnItem = App.findItem(columnType, columnId);
-    const rowItem = App.findItem(rowType, rowId);
-    const combo = App.findCombination(columnType, rowType, columnId, rowId);
+  async showCombinationModal(columnId, rowId, columnType, rowType, td) {
+    const columnItem = await App.fetchItem(columnId);
+    const rowItem = await App.fetchItem(rowId);
+    const combo = await App.fetchCombination(columnId, rowId);
     const rating = combo.rating;
 
     this.modal.innerHTML = this.templates['combination-modal-template']({item1: columnItem, item2: rowItem, rating});
 
     this.modalBackground.classList.remove('hide');
 
-    this.modal.querySelector('select').addEventListener('change', this.handleModalRatingSelect.bind(this, columnId, rowId, columnType, rowType, td));
+    this.modal.querySelector('select').addEventListener('change', this.handleModalRatingSelect.bind(this, columnId, rowId, td));
 
     this.modal.querySelectorAll('.btn-swipe').forEach(btnSwipe => {
       btnSwipe.addEventListener('click', this.handleModalSwipe.bind(this));
@@ -282,17 +282,16 @@ Object.assign(CombinationsPage, {
     this.typesSelectEl.value = `${this.type1}-${this.type2}`;
   },
 
-  handleModalRatingSelect(columnId, rowId, columnType, rowType, td) {
+  async handleModalRatingSelect(columnId, rowId, td) {
     const value = event.target.value;
     const rating = value === '' ? null : +value;
-    App.updateCombination(columnType, rowType, columnId, rowId, rating);
+    await App.updateCombination(columnId, rowId, rating);
     td.dataset.rating = rating;
     td.querySelector('select').innerHTML = this.templates.ratingSelectMenu({ rating: rating });
   },
 
   run() {
     this.setTypes();
-    this.renderCombinations();
     this.bindMoreEvents();
   },
 

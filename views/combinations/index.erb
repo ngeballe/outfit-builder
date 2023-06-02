@@ -1,9 +1,31 @@
 <main>
   <div id="table-container">
+    <table id="combinations-table" class="combinations-table" data-row-type="<%= @row_type %>" data-column-type="<%= @column_type %>">
+      <thead class="combinations-thead">
+        <tr>
+          <th class="combinations-th"></th>
+          <% @column_items.each do |item| %>
+            <%= erb 'combinations/_table_heading'.to_sym, locals: { item: item } %>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody class="combinations-tbody">
+        <% @combinations_matrix.each_with_index do |combinations_for_row, idx| %>
+          <tr data-row-index="<%= idx %>">
+            <%= erb 'combinations/_table_heading'.to_sym, locals: { item: combinations_for_row[0][:row_item] } %>
+            <% combinations_for_row.each_with_index do |combination, col_idx| %>
+              <%= erb 'combinations/_table_cell'.to_sym, locals: { combination: combination, column_index: col_idx } %>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 
   <div class="reset-container">
-    <button class="btn-reset" id="btn-reset">Delete all combinations</button>
+    <form action="/combinations/delete_all" method="post">
+      <button class="btn-reset" id="btn-reset">Delete all combinations</button>
+    </form>
   </div>
 
   <div class="modal-background hide">
@@ -95,10 +117,10 @@
     </div>
     <div class="modal-figure-container help-text-parent">
       <figure class="combination-modal-figure">
-        <img src="{{item1.imagePath}}" alt="" class="combination-modal-image" data-zoom="1">
+        <img src="{{item1.image_path}}" alt="" class="combination-modal-image" data-zoom="1">
       </figure>
       <figure class="combination-modal-figure">
-        <img src="{{item2.imagePath}}" alt="" class="combination-modal-image" data-zoom="1">
+        <img src="{{item2.image_path}}" alt="" class="combination-modal-image" data-zoom="1">
       </figure>
       <div class="help-text hide" data-top="0%" data-left="0%">
         <p class="help-description">To mark the combination "okay" and move on:</p>
@@ -137,9 +159,6 @@
   <select name="" id="types">
     <option value="shirt-pants">shirts and pants</option>
     <option value="shirt-sweater">shirts and sweaters</option>
-    <option value="shirt-shoes">shirts and shoes</option>
     <option value="pants-sweater">pants and sweaters</option>
-    <option value="pants-shoes">pants and shoes</option>
-    <option value="sweater-shoes">sweaters and shoes</option>
   </select>
 </script>

@@ -1,0 +1,6 @@
+<select name="" id="">
+  <option value="" <%= selected_if_equal(rating, "") %>></option>
+  <option value="5" <%= selected_if_equal(rating, 5) %>>good</option>
+  <option value="3" <%= selected_if_equal(rating, 3) %>>okay</option>
+  <option value="0" <%= selected_if_equal(rating, 0) %>>bad</option>
+</select>

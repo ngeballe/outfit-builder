@@ -75,6 +75,86 @@ class DatabaseStorage
     query(sql, id)
   end
 
+  def combinations(column_ids, row_ids)
+    column_ids_string = column_ids.join(', ')
+    row_ids_string = row_ids.join(', ')
+
+    sql = <<~SQL
+      SELECT * from combinations
+      WHERE item_id1 IN (#{column_ids_string})
+      AND item_id2 IN (#{row_ids_string})
+    SQL
+    result = query(sql)
+    result.map do |tuple|
+      tuple_to_combination(tuple)
+    end
+  end
+
+  def combinations_by_types(type1, type2)
+    sql = <<~SQL
+      WHERE item_id1 IN (SELECT id FROM items WHERE type = 'shirt') AND item_id2 IN (SELECT id FROM items WHERE type = 'pants');
+    SQL
+  end
+
+  def valid_combinations_by_types(type1, type2)
+    sql = <<~SQL
+      SELECT
+        item_id1,
+        rating,
+        items1.type AS item1_type,
+        items1.title AS item1_title,
+        item_id2,
+        items2.type AS item2_type,
+        items2.title AS item2_title
+      FROM combinations
+      JOIN items AS items1 ON item_id1 = items1.id
+      JOIN items AS items2 ON item_id2 = items2.id
+      WHERE rating > 0
+        AND items1.type = $1
+        AND items2.type = $2
+    SQL
+    result = query(sql, type1, type2)
+    result.map do |tuple|
+      tuple_to_full_combination(tuple)
+    end
+  end
+
+  def find_combination(id1, id2)
+    sql = <<~SQL
+      SELECT * from combinations
+      WHERE item_id1 = $1
+        AND item_id2 = $2
+    SQL
+    result = query(sql, id1, id2)
+
+    return nil unless result.first
+    tuple_to_combination(result.first)
+  end
+
+  def create_combination(id1, id2, rating)
+    sql = <<~SQL
+      INSERT INTO combinations(item_id1, item_id2, rating)
+        VALUES($1, $2, $3)
+    SQL
+    query(sql, id1, id2, rating)
+  end
+
+  def update_combination(id1, id2, rating)
+    sql = <<~SQL
+      UPDATE combinations
+        SET rating = $3
+        WHERE item_id1 = $1 AND item_id2 = $2
+    SQL
+    query(sql, id1, id2, rating)
+  end
+
+  def delete_all_combinations
+    sql = <<~SQL
+      DELETE FROM combinations
+    SQL
+    query(sql)
+  end
+
   private
 
   def tuple_to_item(tuple)
@@ -92,7 +172,31 @@ class DatabaseStorage
     }
   end
 
-  # def query(sql)
-  #   @
-  # end
+  def tuple_to_combination(tuple)
+    {
+      id: tuple['id'].to_i,
+      column_item_id: tuple['item_id1'].to_i,
+      row_item_id: tuple['item_id2'].to_i,
+      rating: tuple['rating'] &. to_i,
+    }
+  end
+
+  def tuple_to_full_combination(tuple)
+   #    {"item_id1"=>"11",
+   # "rating"=>"5",
+   # "item1_type"=>"shirt",
+   # "item1_title"=>"brick red with gray lines",
+   # "item_id2"=>"2",
+   # "item2_type"=>"pants",
+   # "item2_title"=>"brown cords"}
+    {
+      id1: tuple['item_id1'].to_i,
+      type1: tuple['item1_type'],
+      title1: tuple['item1_title'],
+      id2: tuple['item_id2'].to_i,
+      type2: tuple['item2_type'],
+      title2: tuple['item2_title'],
+      rating: tuple['rating'].to_i,
+    }
+  end
 end

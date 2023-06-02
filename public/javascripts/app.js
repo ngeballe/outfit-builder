@@ -97,15 +97,22 @@ const App = {
     }
   },
 
-  updateCombination(type1, type2, id1, id2, rating) {
-    // find combination
-    const combination = this.findCombination(type1, type2, id1, id2);
-    if (combination) {
-      combination.rating = rating;
-      this.updateLocalStorage();
-    } else {
-      alert('Error! Combination not found!');
+  updateCombination(id1, id2, rating) {
+    if (rating === null) {
+      return this.deleteCombination(id1, id2, rating);
     }
+
+    return new Promise((resolve) => {
+      const json = JSON.stringify({id1, id2, rating});
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/combinations');
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.responseType = 'json';
+      xhr.addEventListener('load', event => {
+        resolve(xhr.response);
+      });
+      xhr.send(json);
+    });
   },
 
   createCombination(id1, id2, rating) {
@@ -161,6 +168,28 @@ const App = {
     return combinations.find(combo => {
       return combo.id1 === id1 && combo.id2 === id2;
     });
+  },
+
+  fetchCombination(id1, id2) {
+    return new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      const paramsString = `?id1=${id1}&id2=${id2}`;
+      xhr.open('GET', '/combination' + paramsString);
+      xhr.responseType = 'json';
+      xhr.addEventListener('load', event => {
+        console.log(xhr.status);
+        if (xhr.status === 200) {
+          const combination = xhr.response;
+          resolve(combination);
+        } else {
+          debugger;
+        }
+      });
+      xhr.send();
+    });
+    // fetch('/combination', {
+    //   method: 'GET',
+    // });
   },
 
   findCombinations(type1, type2) {
@@ -278,23 +307,6 @@ const App = {
     this.updateLocalStorage();
   },
 
-  // updateItem(id, type, imagePath, title, spring, summer, fall, winter, dirty, damaged) {
-  //   // fetch(items, '/')
-
-  //   const item = this.items.find(item => item.id === id && item.type === type);
-
-  //   item.imagePath = imagePath;
-  //   item.title = title;
-  //   item.spring = spring;
-  //   item.summer = summer;
-  //   item.fall = fall;
-  //   item.winter = winter;
-  //   item.dirty = dirty;
-  //   item.damaged = damaged;
-
-  //   this.updateLocalStorage();
-  // },
-
   deleteItem(id) {
     return new Promise((resolve) => {
       if (!id) {
@@ -304,11 +316,8 @@ const App = {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `/items/${id}/delete`);
       xhr.addEventListener('load', event => {
-        // debugger;
-        // this.querySelector
         resolve(xhr.responseText);
       });
-      // fetch();
       xhr.send();
     });
 
@@ -316,6 +325,20 @@ const App = {
     //   return !(item.type === type && item.id === id);
     // });
     // delete combinations with item
+  },
+
+  deleteCombination(id1, id2, rating) {
+    return new Promise((resolve) => {
+      const json = JSON.stringify({ id1, id2 });
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/combinations/delete');
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      xhr.responseType = 'json';
+      xhr.addEventListener('load', event => {
+        resolve(xhr.response);
+      });
+      xhr.send(json);
+    });
   },
 
   deleteCombinationsWithItem(type, id) {

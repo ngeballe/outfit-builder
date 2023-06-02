@@ -1,0 +1,20 @@
+<thead class="outfits-thead">
+  <tr class="outfits-tr">
+    <th class="outfits-th">Shirt</th>
+    <th class="outfits-th">Pants</th>
+    <% if @include_sweaters %>
+      <th class="outfits-th">Sweater</th>
+    <% end %>
+    <th class="outfits-th rating-column">Shirt-Pants</th>
+    <% if @include_sweaters %>
+      <th class="outfits-th rating-column">Shirt-Sweater</th>
+    <% end %>
+    <% if @include_sweaters %>
+      <th class="outfits-th rating-column">Pants-Sweater</th>
+    <% end %>
+    <th class="outfits-th rating-column">Overall Rating</th>
+    <th class="outfits-th">Seasons</th>
+    <th class="outfits-th">Dirty/Damaged Status</th>
+    <th class="outfits-th">View</th>
+  </tr>
+</thead>

@@ -14,32 +14,74 @@ Object.assign(OutfitsPage, {
   },
 
   renderOutfits() {
-    const { includeSweaters, includeShoes, showImages, seasons: seasonsSetting, includeDirty, includeDamaged } = this.tableSettings;
+    const { includeSweaters, showImages, seasons: seasonsSetting, includeDirty, includeDamaged } = this.tableSettings;
 
-    const shirtIds = App.itemIdsByType('shirt');
-    const pantsIds = App.itemIdsByType('pants');
-    const sweaterIds = App.itemIdsByType('sweater');
-    const fullProducts = product(shirtIds, pantsIds, sweaterIds);
+    // const shirtIds = App.itemIdsByType('shirt');
+    // const pantsIds = App.itemIdsByType('pants');
+    // const sweaterIds = App.itemIdsByType('sweater');
+    // const fullProducts = product(shirtIds, pantsIds, sweaterIds);
 
-    const validCombinations = App.validCombinations();
+    // const validCombinations = App.validCombinations();
 
-    let validOutfits = this.validShirtPantsOutfits(validCombinations);
+    // let validOutfits = this.validShirtPantsOutfits(validCombinations);
 
-    if (includeSweaters) {
-      validOutfits = this.updateWithSweaters(validOutfits, validCombinations);
+    // if (includeSweaters) {
+    //   validOutfits = this.updateWithSweaters(validOutfits, validCombinations);
+    // }
+
+    // if (includeShoes) {
+    //   // filter by that
+    //   debugger;
+    // }
+
+    // this.hideOutfitsMessage();
+    // this.addRatings(validOutfits);
+
+    // validOutfits = this.updateWithFullItems(validOutfits);
+    // validOutfits = this.updateWithSeasons(validOutfits, seasonsSetting);
+    // validOutfits = this.filterBasedOnDirtyAndDamaged(validOutfits, includeDirty, includeDamaged);
+
+    if (this.outfits.length === 0) {
+      this.showOufitsMessage('No outfits found. Go set some combinations.');
+      this.outfitsTable.innerHTML = '';
+      return;
     }
 
-    if (includeShoes) {
-      // filter by that
-      debugger;
-    }
+    this.outfitsSorted = sortBy(this.outfits, 'overallRating', true);
 
-    this.hideOutfitsMessage();
-    this.addRatings(validOutfits);
+    this.outfitsTable.innerHTML = this.templates['outfitsTable']({ outfits: this.outfitsSorted, includeSweaters, showImages });
+  },
 
-    validOutfits = this.updateWithFullItems(validOutfits);
-    validOutfits = this.updateWithSeasons(validOutfits, seasonsSetting);
-    validOutfits = this.filterBasedOnDirtyAndDamaged(validOutfits, includeDirty, includeDamaged);
+  async showOutfits() {
+    const { includeSweaters, showImages, seasons: seasonsSetting, includeDirty, includeDamaged } = this.tableSettings;
+
+    const validOutfits = await this.fetchValidOutfits(includeSweaters);
+    debugger;
+
+    // const shirtIds = App.itemIdsByType('shirt');
+    // const pantsIds = App.itemIdsByType('pants');
+    // const sweaterIds = App.itemIdsByType('sweater');
+    // const fullProducts = product(shirtIds, pantsIds, sweaterIds);
+
+    // const validCombinations = App.validCombinations();
+
+    // let validOutfits = this.validShirtPantsOutfits(validCombinations);
+
+    // if (includeSweaters) {
+    //   validOutfits = this.updateWithSweaters(validOutfits, validCombinations);
+    // }
+
+    // if (includeShoes) {
+    //   // filter by that
+    //   debugger;
+    // }
+
+    // this.hideOutfitsMessage();
+    // this.addRatings(validOutfits);
+
+    // validOutfits = this.updateWithFullItems(validOutfits);
+    // validOutfits = this.updateWithSeasons(validOutfits, seasonsSetting);
+    // validOutfits = this.filterBasedOnDirtyAndDamaged(validOutfits, includeDirty, includeDamaged);
 
     if (validOutfits.length === 0) {
       this.showOufitsMessage('No outfits found. Go set some combinations.');
@@ -49,7 +91,20 @@ Object.assign(OutfitsPage, {
 
     validOutfitsSorted = sortBy(validOutfits, 'overallRating', true);
 
-    this.outfitsTable.innerHTML = this.templates['outfitsTable']({ outfits: validOutfitsSorted, includeShoes, includeSweaters, showImages });
+    this.outfitsTable.innerHTML = this.templates['outfitsTable']({ outfits: validOutfitsSorted, includeSweaters, showImages });
+  },
+
+  fetchOutfits(includeSweaters) {
+    return new Promise((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', `/outfits/query?includeSweaters=${includeSweaters}`);
+      xhr.responseType = 'json';
+      xhr.addEventListener('load', event => {
+        const response = xhr.response;
+        resolve(response.outfits);
+      });
+      xhr.send();
+    });
   },
 
   hideOutfitsMessage() {
@@ -172,6 +227,7 @@ Object.assign(OutfitsPage, {
 
   bindMoreEvents() {
     this.includeSweatersCheckbox.addEventListener('change', this.handleIncludeSweatersSetting.bind(this));
+
     this.showImagesCheckbox.addEventListener('change', this.handleShowImagesSetting.bind(this));
     document.querySelector('#seasons').addEventListener('change', this.handleSeasonsSelect.bind(this));
     this.includeDirtyCheckbox.addEventListener('change', this.handleIncludeDirtySetting.bind(this));
@@ -179,24 +235,25 @@ Object.assign(OutfitsPage, {
     this.outfitsTable.addEventListener('click', this.handleOutfitsTableClick.bind(this));
   },
 
-  handleIncludeSweatersSetting(event) {
+  async handleIncludeSweatersSetting(event) {
     this.tableSettings.includeSweaters = event.target.checked;
+    await this.setOutfits();
     this.renderOutfits();
   },
 
   handleShowImagesSetting(event) {
     this.tableSettings.showImages = event.target.checked;
-    this.renderOutfits();
+    this.showOutfits();
   },
 
   handleIncludeDirtySetting(event) {
     this.tableSettings.includeDirty = event.target.checked;
-    this.renderOutfits();
+    this.showOutfits();
   },
 
   handleIncludeDamagedSetting(event) {
     this.tableSettings.includeDamaged = event.target.checked;
-    this.renderOutfits();
+    this.showOutfits();
   },
 
   handleOutfitsTableClick(event) {
@@ -228,7 +285,11 @@ Object.assign(OutfitsPage, {
       this.tableSettings.seasons = [value];
     }
 
-    this.renderOutfits();
+    this.showOutfits();
+  },
+
+  async setOutfits() {
+    this.outfits = await this.fetchOutfits(this.tableSettings.includeSweaters);
   },
 
   init() {
@@ -252,7 +313,8 @@ document.addEventListener('DOMContentLoaded', () => {
     Page.bindEvents();
   };
 
-  OutfitsPage.run = function() {
+  OutfitsPage.run = async function() {
+    await this.setOutfits();
     this.renderOutfits();
     this.bindMoreEvents();
   };
