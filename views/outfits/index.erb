@@ -61,24 +61,12 @@
       {{#if includeSweaters}}
         <th class="outfits-th">Sweater</th>
       {{/if}}
-      {{#if includeShoes}}
-        <th class="outfits-th">Shoes</th>
-      {{/if}}
       <th class="outfits-th rating-column">Shirt-Pants</th>
       {{#if includeSweaters}}
         <th class="outfits-th rating-column">Shirt-Sweater</th>
       {{/if}}
-      {{#if includeShoes}}
-        <th class="outfits-th rating-column">Shirt-Shoes</th>
-      {{/if}}
       {{#if includeSweaters}}
         <th class="outfits-th rating-column">Pants-Sweater</th>
-      {{/if}}
-      {{#if includeShoes}}
-        <th class="outfits-th rating-column">Pants-Shoes</th>
-      {{/if}}
-      {{#if includeShoes}}
-        <th class="outfits-th rating-column">Sweater-Shoes</th>
       {{/if}}
       <th class="outfits-th rating-column">Overall Rating</th>
       <th class="outfits-th">Seasons</th>
@@ -88,30 +76,16 @@
   </thead>
   <tbody class="outfits-tbody">
     {{#each outfits}}
-      <tr data-shirt-id="{{shirtId}}" data-pants-id="{{pantsId}}" data-sweater-id="{{sweaterId}}" data-shoes-id="{{shoesId}}" class="outfits-tr">
+      <tr data-shirt-id="{{shirt.id}}" data-pants-id="{{pants.id}}" data-sweater-id="{{sweater.id}}" class="outfits-tr">
         {{>tableCell item=shirt showImages=../showImages}}
         {{>tableCell item=pants showImages=../showImages}}
         {{#if ../includeSweaters}}
           {{>tableCell item=sweater showImages=../showImages}}
         {{/if}}
-        {{#if ../includeShoes}}
-          <td class="outfits-td">{{shoes.title}}</td>
-        {{/if}}
         <td class="outfits-td">{{shirtPantsRating}}</td>
         {{#if ../includeSweaters}}
           <td class="outfits-td">{{shirtSweaterRating}}</td>
-        {{/if}}
-        {{#if ../includeShoes}}
-          <td class="outfits-td">{{shirtShoesRating}}</td>
-        {{/if}}
-        {{#if ../includeSweaters}}
           <td class="outfits-td">{{pantsSweaterRating}}</td>
-        {{/if}}
-        {{#if ../includeShoes}}
-          <td class="outfits-td">{{pantsShoesRating}}</td>
-        {{/if}}
-        {{#if (and ../includeSweaters ../includeShoes)}}
-          <td class="outfits-td">{{sweaterShoesRating}}</td>
         {{/if}}
         <td class="outfits-td">{{overallRating}}</td>
         <td class="outfits-td">
@@ -153,14 +127,14 @@
   </header>
   <div class="modal-body">
     <figure class="outfit-modal-figure">
-      <img src="{{shirt.imagePath}}" alt="" class="outfit-modal-image" data-zoom="1">
+      <img src="{{shirt.image_path}}" alt="" class="outfit-modal-image" data-zoom="1">
     </figure>
     <figure class="outfit-modal-figure">
-      <img src="{{pants.imagePath}}" alt="" class="outfit-modal-image" data-zoom="1">
+      <img src="{{pants.image_path}}" alt="" class="outfit-modal-image" data-zoom="1">
     </figure>
     {{#if sweater}}
       <figure class="outfit-modal-figure">
-        <img src="{{sweater.imagePath}}" alt="" class="outfit-modal-image" data-zoom="1">
+        <img src="{{sweater.image_path}}" alt="" class="outfit-modal-image" data-zoom="1">
       </figure>
     {{/if}}
   </div>

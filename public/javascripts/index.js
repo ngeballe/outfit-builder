@@ -13,7 +13,6 @@ Object.assign(IndexPage, {
     this.addShirt.addEventListener('click', this.showNewItemModal.bind(this, 'shirt'));
     this.addPants.addEventListener('click', this.showNewItemModal.bind(this, 'pants'));
     this.addSweater.addEventListener('click', this.showNewItemModal.bind(this, 'sweater'));
-    this.addShoes.addEventListener('click', this.showNewItemModal.bind(this, 'shoes'));
 
     document.querySelector('.items').addEventListener('click', this.handleItemLinkClick.bind(this));
 
@@ -199,7 +198,6 @@ Object.assign(IndexPage, {
     // this.shirtsEl.innerHTML = this.templates['item-list-template']({ heading: 'Shirts', items: App.shirts(), type: 'shirt' });
     // this.pantsEl.innerHTML = this.templates['item-list-template']({ heading: 'Pants', items: App.pants(), type: 'pants' });
     // this.sweatersEl.innerHTML = this.templates['item-list-template']({ heading: 'Sweaters', items: App.sweaters(), type: 'sweater' });
-    // this.shoesEl.innerHTML = this.templates['item-list-template']({ heading: 'Shoes', items: App.shoes(), type: 'shoes' });
   },
 
   showNewItemModal(category) {
@@ -217,23 +215,15 @@ Object.assign(IndexPage, {
     form['image-path'].focus();
   },
 
-  // run() {
-  //   this.renderItems();
-  //   // App.items = App.items.filter(item => item.id !== null);
-  //   App.updateLocalStorage();
-  // },
-
   init() {
     Page.init();
 
     this.shirtsEl = document.querySelector('.shirts');
     this.pantsEl = document.querySelector('.pants');
     this.sweatersEl = document.querySelector('.sweaters');
-    this.shoesEl = document.querySelector('.shoes');
     this.addShirt = document.querySelector('#add-shirt');
     this.addPants = document.querySelector('#add-pants');
     this.addSweater = document.querySelector('#add-sweater');
-    this.addShoes = document.querySelector('#add-shoes');
 
     this.pageHeaderContent.innerHTML = this.templates['page-nav-template']();
     this.pageNav = document.querySelector('.page-nav');

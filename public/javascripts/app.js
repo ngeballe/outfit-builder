@@ -70,32 +70,9 @@ function sortBy(arrayOfObjects, criterion, descending = false) {
 }
 
 const App = {
-  ITEM_TYPES: ['shirt', 'pants', 'sweater', 'shoes'],
+  ITEM_TYPES: ['shirt', 'pants', 'sweater'],
   COMBINATION_VETO_RATING: 0,
   SEASONS: ['spring', 'summer', 'fall', 'winter'],
-
-  loadLocalStorageData() {
-    this.items = [];
-
-    const data = JSON.parse(localStorage.getItem('outfits'));
-    console.log(data);
-    debugger;
-    if (!data) {
-      return;
-    }
-
-    const { items, combinations } = data;
-
-    if (items) {
-      this.items = items;
-    }
-
-    if (combinations && !allObjectValuesEmptyArrays(combinations)) {
-      this.combinations = combinations;
-    } else {
-      this.resetCombinations();
-    }
-  },
 
   updateCombination(id1, id2, rating) {
     if (rating === null) {
@@ -271,10 +248,6 @@ const App = {
     return this.itemsByType('sweater');
   },
 
-  shoes() {
-    return this.itemsByType('shoes');
-  },
-
   findShirt(id) {
     return this.shirts().find(shirt => shirt.id === id);
   },
@@ -285,10 +258,6 @@ const App = {
 
   findSweater(id) {
     return this.sweaters().find(sweater => sweater.id === id);
-  },
-
-  findShoes(id) {
-    return this.shoes().find(shoes => shoes.id === id);
   },
 
   createItem(itemType, imagePath, title, spring, summer, fall, winter, dirty, damaged) {

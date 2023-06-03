@@ -5,7 +5,6 @@ Object.assign(OutfitsPage, {
   initTableSettings() {
     this.tableSettings = {
       includeSweaters: document.querySelector('#include-sweaters').checked,
-      includeShoes: false,
       showImages: document.querySelector('#show-images').checked,
       seasons: ['spring', 'summer', 'winter', 'fall'],
       includeDirty: document.querySelector('#include-dirty').checked,
@@ -29,17 +28,14 @@ Object.assign(OutfitsPage, {
     //   validOutfits = this.updateWithSweaters(validOutfits, validCombinations);
     // }
 
-    // if (includeShoes) {
-    //   // filter by that
-    //   debugger;
-    // }
-
     // this.hideOutfitsMessage();
     // this.addRatings(validOutfits);
 
     // validOutfits = this.updateWithFullItems(validOutfits);
-    // validOutfits = this.updateWithSeasons(validOutfits, seasonsSetting);
     // validOutfits = this.filterBasedOnDirtyAndDamaged(validOutfits, includeDirty, includeDamaged);
+
+    const outfitsForSeason = this.filterBySeasons(this.outfits, seasonsSetting);
+    const filteredOutfits = this.filterBasedOnDirtyAndDamaged(outfitsForSeason, includeDirty, includeDamaged);
 
     if (this.outfits.length === 0) {
       this.showOufitsMessage('No outfits found. Go set some combinations.');
@@ -47,51 +43,9 @@ Object.assign(OutfitsPage, {
       return;
     }
 
-    this.outfitsSorted = sortBy(this.outfits, 'overallRating', true);
+    const outfitsSorted = sortBy(filteredOutfits, 'overallRating', true);
 
-    this.outfitsTable.innerHTML = this.templates['outfitsTable']({ outfits: this.outfitsSorted, includeSweaters, showImages });
-  },
-
-  async showOutfits() {
-    const { includeSweaters, showImages, seasons: seasonsSetting, includeDirty, includeDamaged } = this.tableSettings;
-
-    const validOutfits = await this.fetchValidOutfits(includeSweaters);
-    debugger;
-
-    // const shirtIds = App.itemIdsByType('shirt');
-    // const pantsIds = App.itemIdsByType('pants');
-    // const sweaterIds = App.itemIdsByType('sweater');
-    // const fullProducts = product(shirtIds, pantsIds, sweaterIds);
-
-    // const validCombinations = App.validCombinations();
-
-    // let validOutfits = this.validShirtPantsOutfits(validCombinations);
-
-    // if (includeSweaters) {
-    //   validOutfits = this.updateWithSweaters(validOutfits, validCombinations);
-    // }
-
-    // if (includeShoes) {
-    //   // filter by that
-    //   debugger;
-    // }
-
-    // this.hideOutfitsMessage();
-    // this.addRatings(validOutfits);
-
-    // validOutfits = this.updateWithFullItems(validOutfits);
-    // validOutfits = this.updateWithSeasons(validOutfits, seasonsSetting);
-    // validOutfits = this.filterBasedOnDirtyAndDamaged(validOutfits, includeDirty, includeDamaged);
-
-    if (validOutfits.length === 0) {
-      this.showOufitsMessage('No outfits found. Go set some combinations.');
-      this.outfitsTable.innerHTML = '';
-      return;
-    }
-
-    validOutfitsSorted = sortBy(validOutfits, 'overallRating', true);
-
-    this.outfitsTable.innerHTML = this.templates['outfitsTable']({ outfits: validOutfitsSorted, includeSweaters, showImages });
+    this.outfitsTable.innerHTML = this.templates['outfitsTable']({ outfits: outfitsSorted, includeSweaters, showImages });
   },
 
   fetchOutfits(includeSweaters) {
@@ -103,6 +57,7 @@ Object.assign(OutfitsPage, {
         const response = xhr.response;
         resolve(response.outfits);
       });
+      console.log('make it happen');
       xhr.send();
     });
   },
@@ -173,7 +128,7 @@ Object.assign(OutfitsPage, {
 
   updateWithFullItems(validOutfits) {
     return validOutfits.map((outfit) => {
-      const { shirtId, pantsId, sweaterId, shoesId } = outfit;
+      const { shirtId, pantsId, sweaterId } = outfit;
       const newValues = {
         shirt: App.findShirt(shirtId),
         pants: App.findPants(pantsId),
@@ -182,14 +137,11 @@ Object.assign(OutfitsPage, {
       if (sweaterId) {
         newValues.sweater = App.findSweater(sweaterId);
       }
-      if (shoesId) {
-        newValues.shoes = App.findSweater(outshoesId);
-      }
       return Object.assign(outfit, newValues);
     });
   },
 
-  updateWithSeasons(validOutfits, seasonsSetting) {
+  filterBySeasons(validOutfits, seasonsSetting) {
     const result = [];
     const seasons = App.SEASONS;
 
@@ -232,6 +184,7 @@ Object.assign(OutfitsPage, {
     document.querySelector('#seasons').addEventListener('change', this.handleSeasonsSelect.bind(this));
     this.includeDirtyCheckbox.addEventListener('change', this.handleIncludeDirtySetting.bind(this));
     this.includeDamagedCheckbox.addEventListener('change', this.handleIncludeDamagedSetting.bind(this));
+
     this.outfitsTable.addEventListener('click', this.handleOutfitsTableClick.bind(this));
   },
 
@@ -243,17 +196,17 @@ Object.assign(OutfitsPage, {
 
   handleShowImagesSetting(event) {
     this.tableSettings.showImages = event.target.checked;
-    this.showOutfits();
+    this.renderOutfits();
   },
 
   handleIncludeDirtySetting(event) {
     this.tableSettings.includeDirty = event.target.checked;
-    this.showOutfits();
+    this.renderOutfits();
   },
 
   handleIncludeDamagedSetting(event) {
     this.tableSettings.includeDamaged = event.target.checked;
-    this.showOutfits();
+    this.renderOutfits();
   },
 
   handleOutfitsTableClick(event) {
@@ -267,10 +220,15 @@ Object.assign(OutfitsPage, {
     }
   },
 
-  showOutfitModal(shirtId, pantsId, sweaterId) {
-    const shirt = App.findShirt(shirtId);
-    const pants = App.findPants(pantsId);
-    const sweater = App.findSweater(sweaterId);
+  async showOutfitModal(shirtId, pantsId, sweaterId) {
+    const shirt = await App.fetchItem(shirtId);
+    const pants = await App.fetchItem(pantsId);
+    let sweater;
+    if (sweaterId) {
+      sweater = await App.fetchItem(sweaterId);
+    }
+
+    console.log({ shirt, pants, sweater });
 
     this.modal.innerHTML = this.templates['outfit-modal-template']({shirt, pants, sweater});
 
@@ -285,7 +243,7 @@ Object.assign(OutfitsPage, {
       this.tableSettings.seasons = [value];
     }
 
-    this.showOutfits();
+    this.renderOutfits();
   },
 
   async setOutfits() {
